@@ -1,5 +1,3 @@
-using System;
-
 namespace GonDraz.StateMachine
 {
     public abstract class

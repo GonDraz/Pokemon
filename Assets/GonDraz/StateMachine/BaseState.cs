@@ -9,9 +9,9 @@ namespace GonDraz.StateMachine
         private readonly Event _fixedUpdate = new();
         private readonly Event _lateUpdate = new();
         private readonly Event _update = new();
-
-        private TMachine _host;
         public TState PreviousState;
+
+        public TMachine Host { get; private set; }
 
         public virtual void OnEnter()
         {
@@ -38,14 +38,9 @@ namespace GonDraz.StateMachine
             _exit.Invoke();
         }
 
-        public TMachine GetHost()
-        {
-            return _host;
-        }
-
         public virtual void Instance(TMachine host)
         {
-            _host = host;
+            Host = host;
         }
 
         public virtual void OnEnter(TState previousState)

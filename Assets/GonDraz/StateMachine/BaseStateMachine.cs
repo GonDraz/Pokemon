@@ -19,7 +19,7 @@ namespace GonDraz.StateMachine
                 if (_states != null) return _states;
                 _states = new Dictionary<Type, TState>();
 
-                var types = typeof(TMachine).GetNestedTypes(BindingFlags.NonPublic)
+                var types = typeof(TMachine).GetNestedTypes(BindingFlags.NonPublic | BindingFlags.Public)
                     .Where(t => t.IsSubclassOf(typeof(TState)))
                     .ToArray();
                 foreach (var type in types)

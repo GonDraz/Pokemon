@@ -34,8 +34,7 @@ namespace GonDraz.Events
             foreach (var d in _action.GetInvocationList()) CallAction(d);
 
             onComplete?.Invoke();
-        }
-
+        } // ReSharper disable Unity.PerformanceAnalysis
         private void CallAction(Delegate action, params object[] parameters)
         {
             if (action == null) return;

@@ -17,7 +17,7 @@ namespace GonDraz.UI.Route
             if (!_routeParent)
                 _routeParent = parent;
             else
-                Debug.LogError("ScreensParent not null");
+                Debug.LogError("ScreensParent is null");
         }
 
         public static void Go(params Type[] types)

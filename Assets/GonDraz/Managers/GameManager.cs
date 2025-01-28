@@ -29,7 +29,7 @@ namespace GonDraz.Managers
         {
             return new List<Type>
             {
-                // typeof(GlobalStateMachine)
+                typeof(GlobalStateMachine)
             };
         }
 

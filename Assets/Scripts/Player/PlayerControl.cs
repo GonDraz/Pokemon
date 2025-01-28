@@ -28,6 +28,11 @@ namespace Player
             GetCurrentState().Move(context);
         }
 
+        public override Type InitialState()
+        {
+            return typeof(Idle);
+        }
+
         public abstract class PlayerState : BaseState<PlayerControl, PlayerState>
         {
             internal virtual void Move(InputAction.CallbackContext obj)
@@ -39,17 +44,14 @@ namespace Player
         {
             internal override void Move(InputAction.CallbackContext context)
             {
-                if (context.ReadValue<Vector2>() != Vector2.zero)
-                {
-                    GetHost().ChangeState<Walk>();
-                }
+                if (context.ReadValue<Vector2>() != Vector2.zero) Host.ChangeState<Walk>();
             }
         }
 
         private class Walk : PlayerState
         {
-            private Vector2 _movement;
             private bool _isMoving;
+            private Vector2 _movement;
 
             public override void OnUpdate()
             {
@@ -57,49 +59,40 @@ namespace Player
                 if (!_isMoving)
                     if (_movement != Vector2.zero)
                     {
-                        var target = GetHost().transform.position;
+                        var target = Host.transform.position;
                         target.x += _movement.x;
                         target.y += _movement.y;
-                        GetHost().animator.SetFloat(MoveX, _movement.x);
-                        GetHost().animator.SetFloat(MoveY, _movement.y);
+                        Host.animator.SetFloat(MoveX, _movement.x);
+                        Host.animator.SetFloat(MoveY, _movement.y);
 
-                        GetHost().StartCoroutine(Moving(target));
+                        Host.StartCoroutine(Moving(target));
                     }
-
             }
 
             internal override void Move(InputAction.CallbackContext context)
             {
                 _movement = context.ReadValue<Vector2>();
-                if (_movement == Vector2.zero)
-                {
-                    GetHost().ChangeState<Idle>();
-                }
+                if (_movement == Vector2.zero) Host.ChangeState<Idle>();
             }
 
             private IEnumerator Moving(Vector3 target)
             {
                 _isMoving = true;
-                
-                var transformPosition = GetHost().transform.position;
+
+                var transformPosition = Host.transform.position;
                 while ((target - transformPosition).sqrMagnitude > Mathf.Epsilon)
                 {
                     transformPosition =
-                        Vector3.MoveTowards(transformPosition, target, GetHost().moveSpeed * Time.deltaTime);
-                    GetHost().animator.SetBool(IsMoving, _isMoving);
-                    GetHost().transform.position = transformPosition;
+                        Vector3.MoveTowards(transformPosition, target, Host.moveSpeed * Time.deltaTime);
+                    Host.animator.SetBool(IsMoving, _isMoving);
+                    Host.transform.position = transformPosition;
                     yield return null;
                 }
 
-                GetHost().transform.position = target;
+                Host.transform.position = target;
                 _isMoving = false;
-                GetHost().animator.SetBool(IsMoving, _isMoving);
+                Host.animator.SetBool(IsMoving, _isMoving);
             }
-        }
-
-        public override Type InitialState()
-        {
-            return typeof(Idle);
         }
     }
 }
