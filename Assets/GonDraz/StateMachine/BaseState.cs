@@ -2,24 +2,20 @@ using GonDraz.Events;
 
 namespace GonDraz.StateMachine
 {
-    public class BaseState : IState
+    public class BaseState<TMachine, TState> : IState
     {
         private readonly Event _enter = new();
         private readonly Event _exit = new();
         private readonly Event _fixedUpdate = new();
         private readonly Event _lateUpdate = new();
         private readonly Event _update = new();
-        public BaseState PreviousState;
+
+        private TMachine _host;
+        public TState PreviousState;
 
         public virtual void OnEnter()
         {
             _enter.Invoke();
-        }
-
-        public virtual void OnEnter(BaseState previousState)
-        {
-            SetPreviousState(previousState);
-            OnEnter();
         }
 
         public virtual void OnUpdate()
@@ -42,7 +38,23 @@ namespace GonDraz.StateMachine
             _exit.Invoke();
         }
 
-        public void SetPreviousState(BaseState previousState)
+        public TMachine GetHost()
+        {
+            return _host;
+        }
+
+        public virtual void Instance(TMachine host)
+        {
+            _host = host;
+        }
+
+        public virtual void OnEnter(TState previousState)
+        {
+            SetPreviousState(previousState);
+            OnEnter();
+        }
+
+        public void SetPreviousState(TState previousState)
         {
             PreviousState = previousState;
         }

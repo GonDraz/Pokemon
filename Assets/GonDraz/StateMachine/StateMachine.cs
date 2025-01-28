@@ -2,67 +2,67 @@ using UnityEngine;
 
 namespace GonDraz.StateMachine
 {
-    public class StateMachine
+    public class StateMachine<TMachine, TState> where TState : BaseState<TMachine, TState>
     {
-        private BaseState _currentState;
+        public TState CurrentState;
 
         public void OnUpdate()
         {
-            _currentState?.OnUpdate();
+            CurrentState?.OnUpdate();
         }
 
         public void OnLateUpdate()
         {
-            _currentState?.OnLateUpdate();
+            CurrentState?.OnLateUpdate();
         }
 
         public void OnFixedUpdate()
         {
-            _currentState?.OnFixedUpdate();
+            CurrentState?.OnFixedUpdate();
         }
 
-        public void ChangeState(BaseState state, bool canBack = true)
+        public void ChangeState(TState state, bool canBack = true)
         {
-            if (_currentState == null)
+            if (CurrentState == null)
             {
-                _currentState = state;
-                _currentState.OnEnter();
-                Debug.Log("Change state to <color=red>" + _currentState.GetType().Name + "</color>");
+                CurrentState = state;
+                Debug.Log("Change state to <color=red>" + CurrentState.GetType().Name + "</color>");
+                CurrentState.OnEnter();
                 return;
             }
 
-            if (state.GetType().FullName == _currentState.GetType().FullName)
+            if (state.GetType().FullName == CurrentState.GetType().FullName)
                 return;
 
-            _currentState.OnExit();
+            CurrentState.OnExit();
 
-            Debug.Log("Change state from <color=red>" + _currentState.GetType().Name + "</color> to <color=green>" +
+            Debug.Log("Change state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
                       state.GetType().Name + "</color>");
 
-            var previousState = _currentState;
-            _currentState = state;
+            var previousState = CurrentState;
+            CurrentState = state;
             if (!canBack) previousState = null;
-            _currentState.OnEnter(previousState);
+            CurrentState.OnEnter(previousState);
         }
 
         public void BackToPreviousState()
         {
-            if (_currentState.PreviousState == null)
+            if (CurrentState.PreviousState == null)
             {
-                Debug.Log("Previous state is null <color=red>" + _currentState.GetType().Name + "</color>");
+                Debug.Log("Previous state is null <color=red>" + CurrentState.GetType().Name + "</color>");
                 return;
             }
 
-            if (_currentState.PreviousState.GetType().FullName == _currentState.GetType().FullName)
+            if (CurrentState.PreviousState.GetType().FullName == CurrentState.GetType().FullName)
                 return;
 
-            _currentState.OnExit();
+            CurrentState.OnExit();
 
-            Debug.Log("Back state from <color=red>" + _currentState.GetType().Name + "</color> to <color=green>" +
-                      _currentState.PreviousState.GetType().Name + "</color>");
+            Debug.Log("Back state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
+                      CurrentState.PreviousState.GetType().Name + "</color>");
 
-            _currentState = _currentState.PreviousState;
-            _currentState.OnEnter();
+            CurrentState = CurrentState.PreviousState;
+            CurrentState.OnEnter();
         }
     }
 }

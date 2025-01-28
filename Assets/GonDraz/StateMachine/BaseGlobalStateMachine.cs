@@ -2,30 +2,25 @@ using System;
 
 namespace GonDraz.StateMachine
 {
-    public abstract class BaseGlobalStateMachine<T> : BaseStateMachine<T>
-        where T : BaseGlobalStateMachine<T>.BaseGlobalState
+    public abstract class
+        BaseGlobalStateMachine<TMachine> : BaseStateMachine<TMachine, BaseGlobalStateMachine<TMachine>.BaseGlobalState>
+        where TMachine : BaseGlobalStateMachine<TMachine>
     {
-        protected override bool IsDontDestroyOnLoad()
+        public static TMachine Instance { get; private set; }
+
+        protected override void Awake()
         {
-            return false;
+            if (Instance != null)
+            {
+                Destroy(this);
+                return;
+            }
+
+            Instance = this as TMachine;
+            base.Awake();
         }
 
-        public new static void ChangeState(Type type, bool canBack = true)
-        {
-            Instance?.ChangeState(type, canBack);
-        }
-
-        public new static void ChangeState<T1>(bool canBack = true) where T1 : IState
-        {
-            Instance?.ChangeState<T1>(canBack);
-        }
-
-        public new static void BackToPreviousState()
-        {
-            Instance?.BackToPreviousState();
-        }
-
-        public abstract class BaseGlobalState : BaseState
+        public abstract class BaseGlobalState : BaseState<TMachine, BaseGlobalState>
         {
         }
     }

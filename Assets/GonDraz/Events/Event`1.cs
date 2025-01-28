@@ -59,7 +59,6 @@ namespace GonDraz.Events
                 $"Event <color=yellow>[{e._name}]</color> : has been infected : [{newAction.Method.Name}]"
             );
             return true;
-
         }
 
         public static Event<T> operator +(Event<T> e, Action<T> newAction)

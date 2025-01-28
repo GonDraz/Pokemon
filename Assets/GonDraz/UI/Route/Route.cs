@@ -5,7 +5,7 @@ namespace GonDraz.UI.Route
     public class Route : MonoBehaviour
     {
         private bool _onPress;
-        
+
         private void Awake()
         {
             var widgets = GetComponentsInChildren<Presentation>();
