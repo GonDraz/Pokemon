@@ -2,17 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 
 namespace GonDraz.StateMachine
 {
     public abstract class BaseStateMachine<TMachine, TState> : Base where TMachine : BaseStateMachine<TMachine, TState>
         where TState : BaseState<TMachine, TState>
     {
+        [SerializeField] private string currentStateName;
+        [SerializeField] private string previousStateName;
         private readonly StateMachine<TMachine, TState> _stateMachine = new();
 
         private Dictionary<Type, TState> _states;
 
-        public Dictionary<Type, TState> States
+        private Dictionary<Type, TState> States
         {
             get
             {
@@ -75,7 +78,12 @@ namespace GonDraz.StateMachine
 
         public void ChangeState(Type type, bool canBack = true)
         {
-            if (States.TryGetValue(type, out var state)) _stateMachine.ChangeState(state, canBack);
+            if (States.TryGetValue(type, out var state))
+            {
+                _stateMachine.ChangeState(state, canBack);
+                currentStateName = _stateMachine.CurrentState?.GetType().Name;
+                previousStateName = _stateMachine.CurrentState?.PreviousState?.GetType().Name;
+            }
         }
 
         public void ChangeState<T1>(bool canBack = true) where T1 : IState

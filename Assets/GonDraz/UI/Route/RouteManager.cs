@@ -8,7 +8,7 @@ namespace GonDraz.UI.Route
     {
         private static readonly Dictionary<Type, Presentation> Presentations = new();
 
-        private static readonly Stack<Type[]> _stackBased = new();
+        private static readonly Stack<Type[]> StackBased = new();
 
         private static Transform _routeParent;
 
@@ -24,22 +24,22 @@ namespace GonDraz.UI.Route
         {
             ClearPresentations();
             ShowPresentations(types);
-            _stackBased.Push(types);
+            StackBased.Push(types);
         }
 
         public static void PushReplacement(params Type[] types)
         {
-            var oldType = _stackBased.Peek();
+            var oldType = StackBased.Peek();
             ClearPresentations();
             ShowPresentations(types);
-            _stackBased.Push(oldType);
-            _stackBased.Push(types);
+            StackBased.Push(oldType);
+            StackBased.Push(types);
         }
 
         public static void Push(params Type[] types)
         {
             ShowPresentations(types);
-            _stackBased.Push(types);
+            StackBased.Push(types);
         }
 
         private static void ShowPresentations(Type[] types)
@@ -65,17 +65,17 @@ namespace GonDraz.UI.Route
         private static void ClearPresentations()
         {
             foreach (var presentation in Presentations.Values) presentation.Hide();
-            _stackBased.Clear();
+            StackBased.Clear();
         }
 
         public static void Pop()
         {
-            if (_stackBased.Count > 1)
+            if (StackBased.Count > 1)
             {
-                if (_stackBased.TryPop(out var types))
+                if (StackBased.TryPop(out var types))
                 {
                     HidePresentations(types);
-                    ShowPresentations(_stackBased.Peek());
+                    ShowPresentations(StackBased.Peek());
                 }
             }
             else

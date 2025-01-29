@@ -409,6 +409,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5248184719097092931, guid: a6a6b559f782b104ba5b95bccfb5eb4a, type: 3}
+      propertyPath: m_AspectRatio
+      value: 1.1754594
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066454671472820118, guid: a6a6b559f782b104ba5b95bccfb5eb4a, type: 3}
+      propertyPath: m_Name
+      value: Background
+      objectReference: {fileID: 0}
     - target: {fileID: 7865818603414366446, guid: a6a6b559f782b104ba5b95bccfb5eb4a, type: 3}
       propertyPath: m_Name
       value: PreloaderScreen

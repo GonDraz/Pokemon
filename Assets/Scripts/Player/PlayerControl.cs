@@ -53,6 +53,18 @@ namespace Player
             private bool _isMoving;
             private Vector2 _movement;
 
+            public override void OnEnter()
+            {
+                base.OnEnter();
+                Host.animator.SetBool(IsMoving, true);
+            }
+
+            public override void OnExit()
+            {
+                base.OnExit();
+                Host.animator.SetBool(IsMoving, false);
+            }
+
             public override void OnUpdate()
             {
                 base.OnUpdate();
@@ -67,12 +79,15 @@ namespace Player
 
                         Host.StartCoroutine(Moving(target));
                     }
+                    else
+                    {
+                        Host.ChangeState<Idle>();
+                    }
             }
 
             internal override void Move(InputAction.CallbackContext context)
             {
                 _movement = context.ReadValue<Vector2>();
-                if (_movement == Vector2.zero) Host.ChangeState<Idle>();
             }
 
             private IEnumerator Moving(Vector3 target)
@@ -84,14 +99,12 @@ namespace Player
                 {
                     transformPosition =
                         Vector3.MoveTowards(transformPosition, target, Host.moveSpeed * Time.deltaTime);
-                    Host.animator.SetBool(IsMoving, _isMoving);
                     Host.transform.position = transformPosition;
                     yield return null;
                 }
 
                 Host.transform.position = target;
                 _isMoving = false;
-                Host.animator.SetBool(IsMoving, _isMoving);
             }
         }
     }

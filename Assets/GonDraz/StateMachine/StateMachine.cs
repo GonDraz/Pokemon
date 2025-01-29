@@ -4,7 +4,7 @@ namespace GonDraz.StateMachine
 {
     public class StateMachine<TMachine, TState> where TState : BaseState<TMachine, TState>
     {
-        public TState CurrentState;
+        public TState CurrentState { get; private set; }
 
         public void OnUpdate()
         {
@@ -26,7 +26,7 @@ namespace GonDraz.StateMachine
             if (CurrentState == null)
             {
                 CurrentState = state;
-                Debug.Log("Change state to <color=red>" + CurrentState.GetType().Name + "</color>");
+                // Debug.Log("Change state to <color=red>" + CurrentState.GetType().Name + "</color>");
                 CurrentState.OnEnter();
                 return;
             }
@@ -36,8 +36,8 @@ namespace GonDraz.StateMachine
 
             CurrentState.OnExit();
 
-            Debug.Log("Change state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
-                      state.GetType().Name + "</color>");
+            // Debug.Log("Change state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
+            //           state.GetType().Name + "</color>");
 
             var previousState = CurrentState;
             CurrentState = state;
@@ -58,8 +58,8 @@ namespace GonDraz.StateMachine
 
             CurrentState.OnExit();
 
-            Debug.Log("Back state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
-                      CurrentState.PreviousState.GetType().Name + "</color>");
+            // Debug.Log("Back state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
+            //           CurrentState.PreviousState.GetType().Name + "</color>");
 
             CurrentState = CurrentState.PreviousState;
             CurrentState.OnEnter();

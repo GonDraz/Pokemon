@@ -38,6 +38,7 @@ public class GlobalStateMachine : BaseGlobalStateMachine<GlobalStateMachine>
 
     private class MenuState : BaseGlobalState
     {
+        // ReSharper disable Unity.PerformanceAnalysis
         public override void OnEnter()
         {
             base.OnEnter();

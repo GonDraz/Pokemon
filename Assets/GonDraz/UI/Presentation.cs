@@ -1,3 +1,5 @@
+using System;
+using PrimeTween;
 using UnityEngine;
 
 namespace GonDraz.UI
@@ -12,6 +14,8 @@ namespace GonDraz.UI
         [SerializeField] [Range(0, 4)] private float showDuration = 0.25f;
         [SerializeField] [Range(0, 4)] private float hideDuration = 0.125f;
 
+        protected Sequence Sequence;
+
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -19,18 +23,33 @@ namespace GonDraz.UI
         }
 #endif
 
+        private void CreateSequence()
+        {
+            Sequence.Stop();
+            Sequence = Sequence.Create();
+        }
+
         public virtual void Show()
         {
             Active();
-            canvasGroup.alpha = 0f;
-
-            canvasGroup.alpha = 1f;
+            CreateSequence();
+            ChangeAlphaCanvasGroup(1f, showDuration);
         }
+
 
         public virtual void Hide()
         {
-            canvasGroup.alpha = 0f;
-            Inactive();
+            CreateSequence();
+            ChangeAlphaCanvasGroup(0f, hideDuration, Inactive);
+        }
+
+        private void ChangeAlphaCanvasGroup(float to, float duration, Action callback = null)
+        {
+            if (!Mathf.Approximately(canvasGroup.alpha, to))
+            {
+                Sequence.Chain(Tween.Alpha(canvasGroup, to, duration));
+            }
+            if (callback != null) Sequence.OnComplete(callback);
         }
     }
 }

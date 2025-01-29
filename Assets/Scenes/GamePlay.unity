@@ -521,10 +521,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 400807326853689818, guid: 841342d1ca5f9e44983aaeb9accfa10c, type: 3}
-      propertyPath: moveSpeed
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3670170787986324508, guid: 841342d1ca5f9e44983aaeb9accfa10c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -590,6 +586,18 @@ PrefabInstance:
     - target: {fileID: 984045262084214702, guid: a669c3fc42d42e34d834cc3aad3ff1a6, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1354994502805015140, guid: a669c3fc42d42e34d834cc3aad3ff1a6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1354994502805015140, guid: a669c3fc42d42e34d834cc3aad3ff1a6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1354994502805015140, guid: a669c3fc42d42e34d834cc3aad3ff1a6, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3520763148867139969, guid: a669c3fc42d42e34d834cc3aad3ff1a6, type: 3}
       propertyPath: m_Pivot.x
