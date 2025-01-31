@@ -45,10 +45,7 @@ namespace GonDraz.UI
 
         private void ChangeAlphaCanvasGroup(float to, float duration, Action callback = null)
         {
-            if (!Mathf.Approximately(canvasGroup.alpha, to))
-            {
-                Sequence.Chain(Tween.Alpha(canvasGroup, to, duration));
-            }
+            if (!Mathf.Approximately(canvasGroup.alpha, to)) Sequence.Chain(Tween.Alpha(canvasGroup, to, duration));
             if (callback != null) Sequence.OnComplete(callback);
         }
     }
