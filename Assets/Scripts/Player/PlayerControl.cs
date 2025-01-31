@@ -72,8 +72,8 @@ namespace Player
                     if (_movement != Vector2.zero)
                     {
                         var target = Host.transform.position;
-                        target.x += _movement.x;
-                        target.y += _movement.y;
+                        target.x += Mathf.CeilToInt(_movement.x);
+                        target.y += Mathf.CeilToInt(_movement.y);
                         Host.animator.SetFloat(MoveX, _movement.x);
                         Host.animator.SetFloat(MoveY, _movement.y);
 
