@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5974432453594802449}
   - component: {fileID: 4076178676355835645}
   - component: {fileID: 2367498713312527076}
-  - component: {fileID: 3878715539980021334}
+  - component: {fileID: 3881822434462466684}
   m_Layer: 5
   m_Name: InGameScreen
   m_TagString: Untagged
@@ -58,7 +58,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &3878715539980021334
+--- !u!114 &3881822434462466684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

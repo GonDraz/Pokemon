@@ -16,6 +16,14 @@ namespace Player
             private bool _isMoving;
             private Vector2 _movement;
 
+            public override void OnExit()
+            {
+                base.OnExit();
+                Host.animator.SetBool(IsMoving, false);
+                _movement = Vector2.zero;
+                _isMoving = false;
+            }
+
             public override void OnUpdate()
             {
                 base.OnUpdate();
@@ -36,7 +44,6 @@ namespace Player
                 }
                 else
                 {
-                    Host.animator.SetBool(IsMoving, false);
                     Host.ChangeState<Idle>();
                 }
             }

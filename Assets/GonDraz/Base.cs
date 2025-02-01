@@ -5,27 +5,40 @@ namespace GonDraz
 {
     public abstract class Base : MonoBehaviour, ISubscribable
     {
+        public bool _isSubscribe;
+
         protected virtual void OnEnable()
         {
-            if (SubscribeUsingOnEnable()) Subscribe();
+            if (SubscribeUsingOnEnable() && !_isSubscribe)
+            {
+                _isSubscribe = true;
+                Subscribe();
+            }
         }
 
         protected virtual void OnDisable()
         {
-            if (UnsubscribeUsingOnDisable()) Unsubscribe();
+            if (UnsubscribeUsingOnDisable() && _isSubscribe)
+            {
+                _isSubscribe = false;
+                Unsubscribe();
+            }
         }
 
         public void OnDestroy()
         {
+            _isSubscribe = false;
             Unsubscribe();
         }
 
         public virtual void Subscribe()
         {
+            _isSubscribe = true;
         }
 
         public virtual void Unsubscribe()
         {
+            _isSubscribe = false;
         }
 
         protected virtual bool SubscribeUsingOnEnable()

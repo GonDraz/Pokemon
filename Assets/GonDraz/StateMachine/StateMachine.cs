@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace GonDraz.StateMachine
 {
     public class StateMachine<TMachine, TState> where TState : BaseState<TMachine, TState>
@@ -45,16 +43,16 @@ namespace GonDraz.StateMachine
             CurrentState.OnEnter(previousState);
         }
 
+        public bool CanBack()
+        {
+            if (CurrentState.PreviousState == null) return false;
+
+            return CurrentState.PreviousState.GetType().FullName != CurrentState.GetType().FullName;
+        }
+
         public void BackToPreviousState()
         {
-            if (CurrentState.PreviousState == null)
-            {
-                Debug.Log("Previous state is null <color=red>" + CurrentState.GetType().Name + "</color>");
-                return;
-            }
-
-            if (CurrentState.PreviousState.GetType().FullName == CurrentState.GetType().FullName)
-                return;
+            if (!CanBack()) return;
 
             CurrentState.OnExit();
 

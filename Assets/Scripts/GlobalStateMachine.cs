@@ -56,6 +56,15 @@ public class GlobalStateMachine : BaseGlobalStateMachine<GlobalStateMachine>
         }
     }
 
+    public class InGamePauseState : BaseGlobalState
+    {
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            RouteManager.Go(typeof(InGamePauseScreen));
+        } // ReSharper disable Unity.PerformanceAnalysis
+    }
+
 
     private class SettingState : BaseGlobalState
     {

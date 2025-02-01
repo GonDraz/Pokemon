@@ -4,38 +4,38 @@ namespace GonDraz.StateMachine
 {
     public class BaseState<TMachine, TState> : IState
     {
-        private readonly Event _enter = new();
-        private readonly Event _exit = new();
-        private readonly Event _fixedUpdate = new();
-        private readonly Event _lateUpdate = new();
-        private readonly Event _update = new();
+        public Event Enter = new();
+        public Event Exit = new();
+        public Event FixedUpdate = new();
+        public Event LateUpdate = new();
         public TState PreviousState;
+        public Event Update = new();
 
         public TMachine Host { get; private set; }
 
         public virtual void OnEnter()
         {
-            _enter.Invoke();
+            Enter.Invoke();
         }
 
         public virtual void OnUpdate()
         {
-            _update.Invoke();
+            Update.Invoke();
         }
 
         public virtual void OnLateUpdate()
         {
-            _lateUpdate.Invoke();
+            LateUpdate.Invoke();
         }
 
         public virtual void OnFixedUpdate()
         {
-            _fixedUpdate.Invoke();
+            FixedUpdate.Invoke();
         }
 
         public virtual void OnExit()
         {
-            _exit.Invoke();
+            Exit.Invoke();
         }
 
         public virtual void Instance(TMachine host)

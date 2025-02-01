@@ -91,9 +91,64 @@ namespace GonDraz.StateMachine
             ChangeState(typeof(T1), canBack);
         }
 
+        public bool CanBack()
+        {
+            return _stateMachine.CanBack();
+        }
+
         public void BackToPreviousState()
         {
             _stateMachine.BackToPreviousState();
+        } // ReSharper disable Unity.PerformanceAnalysis
+        public void RegisterEvent<TS>(EventState eventState, Action action) where TS : TState
+        {
+            if (States.TryGetValue(typeof(TS), out var state))
+                switch (eventState)
+                {
+                    case EventState.Enter:
+                        state.Enter += action;
+                        break;
+                    case EventState.Exit:
+                        state.Exit += action;
+                        break;
+                    case EventState.FixedUpdate:
+                        state.FixedUpdate += action;
+                        break;
+                    case EventState.LateUpdate:
+                        state.LateUpdate += action;
+                        break;
+                    case EventState.Update:
+                        state.Update += action;
+                        break;
+                }
+            else
+                Debug.LogError("Error RegisterEvent: " + eventState + " Can't register Action: " + action);
+        }
+
+        // ReSharper disable Unity.PerformanceAnalysis
+        public void UnregisterEvent<TS>(EventState eventState, Action action) where TS : TState
+        {
+            if (States.TryGetValue(typeof(TS), out var state))
+                switch (eventState)
+                {
+                    case EventState.Enter:
+                        state.Enter -= action;
+                        break;
+                    case EventState.Exit:
+                        state.Exit -= action;
+                        break;
+                    case EventState.FixedUpdate:
+                        state.FixedUpdate -= action;
+                        break;
+                    case EventState.LateUpdate:
+                        state.LateUpdate -= action;
+                        break;
+                    case EventState.Update:
+                        state.Update -= action;
+                        break;
+                }
+            else
+                Debug.LogError("Error UnregisterEvent: " + eventState + " Can't unregister Action: " + action);
         }
     }
 }

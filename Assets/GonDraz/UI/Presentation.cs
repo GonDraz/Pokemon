@@ -29,13 +29,17 @@ namespace GonDraz.UI
             Sequence = Sequence.Create();
         }
 
+        protected override bool SubscribeUsingOnEnable()
+        {
+            return true;
+        }
+
         public virtual void Show()
         {
             Active();
             CreateSequence();
             ChangeAlphaCanvasGroup(1f, showDuration);
         }
-
 
         public virtual void Hide()
         {

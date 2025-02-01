@@ -1,3 +1,4 @@
+using GonDraz.Managers;
 using UnityEngine;
 
 namespace GonDraz.UI.Route
@@ -22,7 +23,12 @@ namespace GonDraz.UI.Route
         {
             if (Input.GetKey(KeyCode.Escape))
             {
-                if (!_onPress) RouteManager.Pop();
+                if (!_onPress)
+                {
+                    EventManager.GamePause.Invoke();
+                    RouteManager.Pop();
+                }
+
                 _onPress = true;
             }
             else

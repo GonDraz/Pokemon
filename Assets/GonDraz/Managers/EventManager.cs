@@ -6,5 +6,6 @@ namespace GonDraz.Managers
     {
         public static Event ApplicationLoadFinished = new("ApplicationLoadFinished");
         public static Event<bool> ApplicationPause = new("ApplicationPause");
+        public static Event GamePause = new("GamePause");
     }
 }

@@ -2,9 +2,9 @@
 
 namespace UI.Screens
 {
-    public class MenuScreen : Presentation
+    public class InGamePauseScreen : Presentation
     {
-        public void OnPlayButtonClick()
+        public void OnBackGameButtonClick()
         {
             GlobalStateMachine.Instance.ChangeState<GlobalStateMachine.InGameState>(false);
         }

@@ -39,16 +39,49 @@ namespace Player
             {
                 return !Physics2D.OverlapCircle(target, 0.1f, Host.solidObjectLayerMask);
             }
+
+            public override void OnEnter()
+            {
+                base.OnEnter();
+                GlobalStateMachine.Instance.RegisterEvent<GlobalStateMachine.InGameState>(EventState.Exit,
+                    OnInGameExit);
+            }
+
+            public override void OnExit()
+            {
+                base.OnExit();
+                GlobalStateMachine.Instance.UnregisterEvent<GlobalStateMachine.InGameState>(EventState.Exit,
+                    OnInGameExit);
+            }
+
+            private void OnInGameExit()
+            {
+                Host.ChangeState<None>();
+            }
         }
-        
+
         public class None : PlayerState
         {
             public override void OnEnter()
             {
                 base.OnEnter();
-                
-                Host.ChangeState<Idle>();
-                // GlobalStateMachine.Instance.InitialState().
+                GlobalStateMachine.Instance.RegisterEvent<GlobalStateMachine.InGameState>(EventState.Enter,
+                    OnStartGame);
+            }
+
+            public override void OnExit()
+            {
+                base.OnExit();
+                GlobalStateMachine.Instance.UnregisterEvent<GlobalStateMachine.InGameState>(EventState.Enter,
+                    OnStartGame);
+            }
+
+            private void OnStartGame()
+            {
+                if (Host.CanBack())
+                    Host.BackToPreviousState();
+                else
+                    Host.ChangeState<Idle>(false);
             }
         }
     }

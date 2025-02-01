@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3162639801648699576}
   - component: {fileID: 5248184719097092931}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 4
-  m_AspectRatio: 1.7663816
+  m_AspectRatio: 1.1754594
 --- !u!1 &7865818603414366446
 GameObject:
   m_ObjectHideFlags: 0
