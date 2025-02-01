@@ -9,7 +9,10 @@ namespace Player
         {
             internal override void Move(InputAction.CallbackContext context)
             {
-                if (context.ReadValue<Vector2>() != Vector2.zero) Host.ChangeState<Walk>();
+                if (context.ReadValue<Vector2>() != Vector2.zero)
+                {
+                    Host.ChangeState<Walk>();
+                }
             }
         }
     }

@@ -26,7 +26,7 @@ namespace Player
 
         public override Type InitialState()
         {
-            return typeof(Idle);
+            return typeof(None);
         }
 
         public abstract class PlayerState : BaseState<PlayerControl, PlayerState>
@@ -37,7 +37,18 @@ namespace Player
 
             protected bool IsWalkable(Vector3 target)
             {
-                return !Physics2D.OverlapCircle(target, 0.3f, Host.solidObjectLayerMask);
+                return !Physics2D.OverlapCircle(target, 0.1f, Host.solidObjectLayerMask);
+            }
+        }
+        
+        public class None : PlayerState
+        {
+            public override void OnEnter()
+            {
+                base.OnEnter();
+                
+                Host.ChangeState<Idle>();
+                // GlobalStateMachine.Instance.InitialState().
             }
         }
     }

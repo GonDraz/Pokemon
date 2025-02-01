@@ -16,18 +16,6 @@ namespace Player
             private bool _isMoving;
             private Vector2 _movement;
 
-            public override void OnEnter()
-            {
-                base.OnEnter();
-                Host.animator.SetBool(IsMoving, true);
-            }
-
-            public override void OnExit()
-            {
-                base.OnExit();
-                Host.animator.SetBool(IsMoving, false);
-            }
-
             public override void OnUpdate()
             {
                 base.OnUpdate();
@@ -39,18 +27,19 @@ namespace Player
                     target.y += Mathf.CeilToInt(_movement.y);
                     Host.animator.SetFloat(MoveX, _movement.x);
                     Host.animator.SetFloat(MoveY, _movement.y);
+                    Host.animator.SetBool(IsMoving, true);
 
                     if (IsWalkable(target))
-                        Host.StartCoroutine(Moving(target));
+                        Host.StartCoroutine(MoveTo(target));
                     else
-                        Host.ChangeState<Idle>();
+                        Host.animator.SetBool(IsMoving, false);
                 }
                 else
                 {
+                    Host.animator.SetBool(IsMoving, false);
                     Host.ChangeState<Idle>();
                 }
             }
-
 
             internal override void Move(InputAction.CallbackContext context)
             {
@@ -71,7 +60,7 @@ namespace Player
                 _movement = input;
             }
 
-            private IEnumerator Moving(Vector3 target)
+            private IEnumerator MoveTo(Vector3 target)
             {
                 _isMoving = true;
 
