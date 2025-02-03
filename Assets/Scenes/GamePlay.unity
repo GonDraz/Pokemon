@@ -355,13 +355,17 @@ PrefabInstance:
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 2482513524776064455}
+    - target: {fileID: 7552440486300994070, guid: b7b4dac0c2de19248bbce41f28fe050e, type: 3}
+      propertyPath: orthographic size
+      value: 5.625
+      objectReference: {fileID: 0}
     - target: {fileID: 8042044681073062870, guid: b7b4dac0c2de19248bbce41f28fe050e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8042044681073062870, guid: b7b4dac0c2de19248bbce41f28fe050e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.75
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8042044681073062870, guid: b7b4dac0c2de19248bbce41f28fe050e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -414,7 +418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3670170787986324508, guid: 841342d1ca5f9e44983aaeb9accfa10c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.75
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3670170787986324508, guid: 841342d1ca5f9e44983aaeb9accfa10c, type: 3}
       propertyPath: m_LocalPosition.z

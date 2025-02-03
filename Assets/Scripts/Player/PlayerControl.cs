@@ -28,7 +28,7 @@ namespace Player
         {
             return typeof(None);
         }
-
+        
         public abstract class PlayerState : BaseState<PlayerControl, PlayerState>
         {
             internal virtual void Move(InputAction.CallbackContext obj)
@@ -37,7 +37,8 @@ namespace Player
 
             protected bool IsWalkable(Vector3 target)
             {
-                return !Physics2D.OverlapCircle(target, 0.1f, Host.solidObjectLayerMask);
+                target.y -= 0.5f;
+                return !Physics2D.OverlapCircle(target, 0.25f, Host.solidObjectLayerMask);
             }
 
             public override void OnEnter()

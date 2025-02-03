@@ -5,7 +5,7 @@ namespace GonDraz
 {
     public abstract class Base : MonoBehaviour, ISubscribable
     {
-        public bool _isSubscribe;
+        private bool _isSubscribe;
 
         protected virtual void OnEnable()
         {
