@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace GonDraz.StateMachine
@@ -9,8 +10,8 @@ namespace GonDraz.StateMachine
     public abstract class BaseStateMachine<TMachine, TState> : Base where TMachine : BaseStateMachine<TMachine, TState>
         where TState : BaseState<TMachine, TState>
     {
-        [SerializeField] private string currentStateName;
-        [SerializeField] private string previousStateName;
+        [SerializeField, ReadOnly] private string currentStateName;
+        [SerializeField, ReadOnly] private string previousStateName;
         private readonly StateMachine<TMachine, TState> _stateMachine = new();
 
         private Dictionary<Type, TState> _states;

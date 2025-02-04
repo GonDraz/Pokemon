@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Event = GonDraz.Events.Event;
 
 namespace Player
 {
@@ -10,7 +12,10 @@ namespace Player
         private static readonly int MoveY = Animator.StringToHash("MoveY");
         private static readonly int IsMoving = Animator.StringToHash("IsMoving");
         [SerializeField] [Range(0.25f, 5f)] internal float moveSpeed = 3f;
-
+        [SerializeField] private LayerMask solidObjectLayerMask;
+        [SerializeField] private LayerMask grassLayerMask;
+        [SerializeField] private LayerMask waterLayerMask;
+        
         private class Walk : PlayerState
         {
             private bool _isMoving;
@@ -22,6 +27,12 @@ namespace Player
                 Host.animator.SetBool(IsMoving, false);
                 _movement = Vector2.zero;
                 _isMoving = false;
+            }
+
+            private bool IsWalkable(Vector3 target)
+            {
+                target.y -= 0.5f;
+                return !Physics2D.OverlapCircle(target, 0.25f, Host.solidObjectLayerMask);
             }
 
             public override void OnUpdate()
@@ -38,13 +49,21 @@ namespace Player
                     Host.animator.SetBool(IsMoving, true);
 
                     if (IsWalkable(target))
-                        Host.StartCoroutine(MoveTo(target));
+                        Host.StartCoroutine(MoveTo(target, CheckForEncounters));
                     else
                         Host.animator.SetBool(IsMoving, false);
                 }
                 else
                 {
                     Host.ChangeState<Idle>();
+                }
+            }
+
+            private void CheckForEncounters()
+            {
+                if (IsGrass(Host.transform.position))
+                {
+                    Debug.Log("dddddddddddddddddddddddddd");
                 }
             }
 
@@ -67,7 +86,19 @@ namespace Player
                 _movement = input;
             }
 
-            private IEnumerator MoveTo(Vector3 target)
+            private bool IsWater(Vector3 target)
+            {
+                target.y -= 0.5f;
+                return Physics2D.OverlapCircle(target, 0.25f, Host.waterLayerMask);
+            }
+            
+            private bool IsGrass(Vector3 target)
+            {
+                target.y -= 0.5f;
+                return Physics2D.OverlapCircle(target, 0.25f, Host.grassLayerMask);
+            }
+
+            private IEnumerator MoveTo(Vector3 target, Action callback = null)
             {
                 _isMoving = true;
 
@@ -82,6 +113,7 @@ namespace Player
 
                 Host.transform.position = target;
                 _isMoving = false;
+                callback?.Invoke();
             }
         }
     }

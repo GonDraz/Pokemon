@@ -9,7 +9,6 @@ namespace Player
     public partial class PlayerControl : BaseStateMachine<PlayerControl, PlayerControl.PlayerState>
     {
         [SerializeField] internal Animator animator;
-        [SerializeField] private LayerMask solidObjectLayerMask;
 
 #if UNITY_EDITOR
 
@@ -33,12 +32,6 @@ namespace Player
         {
             internal virtual void Move(InputAction.CallbackContext obj)
             {
-            }
-
-            protected bool IsWalkable(Vector3 target)
-            {
-                target.y -= 0.5f;
-                return !Physics2D.OverlapCircle(target, 0.25f, Host.solidObjectLayerMask);
             }
 
             public override void OnEnter()
