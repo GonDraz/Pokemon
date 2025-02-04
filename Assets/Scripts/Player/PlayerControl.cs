@@ -18,6 +18,11 @@ namespace Player
         }
 #endif
 
+        public void OnSprintPlayerInput(InputAction.CallbackContext context)
+        {
+            GetCurrentState().Sprint(context);
+        }
+
         public void OnMovePlayerInput(InputAction.CallbackContext context)
         {
             GetCurrentState().Move(context);
@@ -27,10 +32,14 @@ namespace Player
         {
             return typeof(None);
         }
-        
+
         public abstract class PlayerState : BaseState<PlayerControl, PlayerState>
         {
-            internal virtual void Move(InputAction.CallbackContext obj)
+            internal virtual void Move(InputAction.CallbackContext context)
+            {
+            }
+
+            internal virtual void Sprint(InputAction.CallbackContext context)
             {
             }
 

@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Event = GonDraz.Events.Event;
 
 namespace Player
 {
@@ -11,11 +10,11 @@ namespace Player
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");
         private static readonly int IsMoving = Animator.StringToHash("IsMoving");
-        [SerializeField] [Range(0.25f, 5f)] internal float moveSpeed = 3f;
+        [SerializeField] [Range(0.25f, 5f)] private float walkSpeed = 4f;
         [SerializeField] private LayerMask solidObjectLayerMask;
         [SerializeField] private LayerMask grassLayerMask;
         [SerializeField] private LayerMask waterLayerMask;
-        
+
         private class Walk : PlayerState
         {
             private bool _isMoving;
@@ -55,16 +54,18 @@ namespace Player
                 }
                 else
                 {
-                    Host.ChangeState<Idle>();
+                    NotMovement();
                 }
+            }
+
+            protected virtual void NotMovement()
+            {
+                Host.ChangeState<Idle>();
             }
 
             private void CheckForEncounters()
             {
-                if (IsGrass(Host.transform.position))
-                {
-                    Debug.Log("dddddddddddddddddddddddddd");
-                }
+                if (IsGrass(Host.transform.position)) Debug.Log("đang trên cỏ");
             }
 
             internal override void Move(InputAction.CallbackContext context)
@@ -86,12 +87,17 @@ namespace Player
                 _movement = input;
             }
 
+            internal override void Sprint(InputAction.CallbackContext context)
+            {
+                if (context.control.IsPressed()) Host.ChangeState<MoveBicycle>();
+            }
+
             private bool IsWater(Vector3 target)
             {
                 target.y -= 0.5f;
                 return Physics2D.OverlapCircle(target, 0.25f, Host.waterLayerMask);
             }
-            
+
             private bool IsGrass(Vector3 target)
             {
                 target.y -= 0.5f;
@@ -106,7 +112,7 @@ namespace Player
                 while ((target - transformPosition).sqrMagnitude > Mathf.Epsilon)
                 {
                     transformPosition =
-                        Vector3.MoveTowards(transformPosition, target, Host.moveSpeed * Time.deltaTime);
+                        Vector3.MoveTowards(transformPosition, target, MoveSpeed() * Time.deltaTime);
                     Host.transform.position = transformPosition;
                     yield return null;
                 }
@@ -114,6 +120,11 @@ namespace Player
                 Host.transform.position = target;
                 _isMoving = false;
                 callback?.Invoke();
+            }
+
+            public virtual float MoveSpeed()
+            {
+                return Host.walkSpeed;
             }
         }
     }

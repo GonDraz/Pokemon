@@ -11,6 +11,11 @@ namespace Player
             {
                 if (context.ReadValue<Vector2>() != Vector2.zero) Host.ChangeState<Walk>();
             }
+
+            internal override void Sprint(InputAction.CallbackContext context)
+            {
+                if (context.control.IsPressed()) Host.ChangeState<BicycleStandStill>();
+            }
         }
     }
 }
