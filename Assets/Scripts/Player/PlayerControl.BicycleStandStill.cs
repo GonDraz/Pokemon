@@ -11,7 +11,7 @@ namespace Player
             {
                 if (context.ReadValue<Vector2>() != Vector2.zero) Host.ChangeState<MoveBicycle>();
             }
-            
+
             internal override void Crouch(InputAction.CallbackContext context)
             {
                 Host.animator.SetBool(IsBicycle, false);

@@ -16,7 +16,7 @@ namespace Player
             {
                 if (context.control.IsPressed()) Host.ChangeState<Run>();
             }
-            
+
             internal override void Crouch(InputAction.CallbackContext context)
             {
                 Host.animator.SetBool(IsBicycle, true);

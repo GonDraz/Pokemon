@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Player
 {
@@ -11,9 +12,13 @@ namespace Player
         private class MoveBicycle : Walk
         {
             protected override void NotMovement()
-            {                
+            {
                 Host.animator.SetBool(IsMoving, false);
                 Host.ChangeState<BicycleStandStill>();
+            }
+
+            internal override void Sprint(InputAction.CallbackContext context)
+            {
             }
 
             public override float MoveSpeed()

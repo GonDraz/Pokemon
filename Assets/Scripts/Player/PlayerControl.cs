@@ -59,8 +59,8 @@ namespace Player
 
             internal virtual void Sprint(InputAction.CallbackContext context)
             {
-            }            
-            
+            }
+
             internal virtual void Crouch(InputAction.CallbackContext context)
             {
             }
