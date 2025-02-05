@@ -10,6 +10,7 @@ namespace Player
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");
         private static readonly int IsMoving = Animator.StringToHash("IsMoving");
+        private static readonly int IsRun = Animator.StringToHash("IsRun");
         [SerializeField] [Range(0.25f, 5f)] private float walkSpeed = 4f;
         [SerializeField] private LayerMask solidObjectLayerMask;
         [SerializeField] private LayerMask grassLayerMask;
@@ -17,16 +18,7 @@ namespace Player
 
         private class Walk : PlayerState
         {
-            private bool _isMoving;
-            private Vector2 _movement;
-
-            public override void OnExit()
-            {
-                base.OnExit();
-                Host.animator.SetBool(IsMoving, false);
-                _movement = Vector2.zero;
-                _isMoving = false;
-            }
+            internal Vector2 _movement;
 
             private bool IsWalkable(Vector3 target)
             {
@@ -37,7 +29,7 @@ namespace Player
             public override void OnUpdate()
             {
                 base.OnUpdate();
-                if (_isMoving) return;
+                if (Host._isMoving) return;
                 if (_movement != Vector2.zero)
                 {
                     var target = Host.transform.position;
@@ -60,6 +52,7 @@ namespace Player
 
             protected virtual void NotMovement()
             {
+                Host.animator.SetBool(IsMoving, false);
                 Host.ChangeState<Idle>();
             }
 
@@ -87,9 +80,15 @@ namespace Player
                 _movement = input;
             }
 
+
             internal override void Sprint(InputAction.CallbackContext context)
             {
-                if (context.control.IsPressed()) Host.ChangeState<MoveBicycle>();
+                if (context.control.IsPressed())
+                    if (Host.TryGetState<Run>(out var state))
+                    {
+                        state._movement = _movement;
+                        Host.ChangeState<Run>();
+                    }
             }
 
             private bool IsWater(Vector3 target)
@@ -104,21 +103,22 @@ namespace Player
                 return Physics2D.OverlapCircle(target, 0.25f, Host.grassLayerMask);
             }
 
-            private IEnumerator MoveTo(Vector3 target, Action callback = null)
+            protected IEnumerator MoveTo(Vector3 target, Action callback = null)
             {
-                _isMoving = true;
+                Host._isMoving = true;
+                var speed = MoveSpeed();
 
                 var transformPosition = Host.transform.position;
                 while ((target - transformPosition).sqrMagnitude > Mathf.Epsilon)
                 {
                     transformPosition =
-                        Vector3.MoveTowards(transformPosition, target, MoveSpeed() * Time.deltaTime);
+                        Vector3.MoveTowards(transformPosition, target, speed * Time.deltaTime);
                     Host.transform.position = transformPosition;
                     yield return null;
                 }
 
                 Host.transform.position = target;
-                _isMoving = false;
+                Host._isMoving = false;
                 callback?.Invoke();
             }
 

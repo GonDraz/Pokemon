@@ -10,8 +10,8 @@ namespace GonDraz.StateMachine
     public abstract class BaseStateMachine<TMachine, TState> : Base where TMachine : BaseStateMachine<TMachine, TState>
         where TState : BaseState<TMachine, TState>
     {
-        [SerializeField, ReadOnly] private string currentStateName;
-        [SerializeField, ReadOnly] private string previousStateName;
+        [SerializeField] [ReadOnly] private string currentStateName;
+        [SerializeField] [ReadOnly] private string previousStateName;
         private readonly StateMachine<TMachine, TState> _stateMachine = new();
 
         private Dictionary<Type, TState> _states;
@@ -63,11 +63,11 @@ namespace GonDraz.StateMachine
         }
 
 
-        public bool TryGetState<TType>(out TState state) where TType : TState
+        public bool TryGetState<TType>(out TType state) where TType : TState
         {
             if (States.TryGetValue(typeof(TType), out var value))
             {
-                state = value;
+                state = (TType)value;
                 return true;
             }
 

@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
-  m_Sprite: {fileID: 7152930139536384079, guid: 3111f23cd57d2be48b2ee6bac4a23588, type: 3}
+  m_Sprite: {fileID: -204990556, guid: b8557a580c821c94d8754a7d815ab232, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &2115066827511408049
@@ -155,7 +155,8 @@ MonoBehaviour:
   currentStateName: 
   previousStateName: 
   animator: {fileID: 4906741888154569904}
-  moveBicycleSpeed: 12
+  bicycleSpeed: 12
+  runSpeed: 6
   walkSpeed: 4
   solidObjectLayerMask:
     serializedVersion: 2

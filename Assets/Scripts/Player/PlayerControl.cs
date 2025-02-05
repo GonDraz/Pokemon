@@ -9,6 +9,7 @@ namespace Player
     public partial class PlayerControl : BaseStateMachine<PlayerControl, PlayerControl.PlayerState>
     {
         [SerializeField] internal Animator animator;
+        private bool _isMoving;
 
 #if UNITY_EDITOR
 

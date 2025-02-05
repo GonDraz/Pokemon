@@ -14,7 +14,7 @@ namespace Player
 
             internal override void Sprint(InputAction.CallbackContext context)
             {
-                if (context.control.IsPressed()) Host.ChangeState<BicycleStandStill>();
+                if (context.control.IsPressed()) Host.ChangeState<Run>();
             }
         }
     }

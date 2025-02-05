@@ -38,22 +38,20 @@ public class GlobalStateMachine : BaseGlobalStateMachine<GlobalStateMachine>
 
     private class MenuState : BaseGlobalState
     {
-        // ReSharper disable Unity.PerformanceAnalysis
         public override void OnEnter()
         {
             base.OnEnter();
             RouteManager.Go(typeof(MenuScreen));
-        }
+        } // ReSharper disable Unity.PerformanceAnalysis
     }
 
     public class InGameState : BaseGlobalState
     {
-        // ReSharper disable Unity.PerformanceAnalysis
         public override void OnEnter()
         {
             base.OnEnter();
             RouteManager.Go(typeof(InGameScreen));
-        }
+        } // ReSharper disable Unity.PerformanceAnalysis
     }
 
     public class InGamePauseState : BaseGlobalState
