@@ -8,7 +8,19 @@ namespace Player
     [RequireComponent(typeof(Animator))]
     public partial class PlayerControl : BaseStateMachine<PlayerControl, PlayerControl.PlayerState>
     {
+        private static readonly int MoveX = Animator.StringToHash("MoveX");
+        private static readonly int MoveY = Animator.StringToHash("MoveY");
+        private static readonly int IsMoving = Animator.StringToHash("IsMoving");
+        private static readonly int IsRun = Animator.StringToHash("IsRun");
+        private static readonly int IsBicycle = Animator.StringToHash("IsBicycle");
+
         [SerializeField] internal Animator animator;
+
+        [SerializeField] private LayerMask solidObjectLayerMask;
+
+        [SerializeField] private LayerMask grassLayerMask;
+
+        [SerializeField] private LayerMask waterLayerMask;
         private bool _isMoving;
 
 #if UNITY_EDITOR
@@ -29,6 +41,11 @@ namespace Player
             GetCurrentState().Move(context);
         }
 
+        public void OnCrouchPlayerInput(InputAction.CallbackContext context)
+        {
+            GetCurrentState().Crouch(context);
+        }
+
         public override Type InitialState()
         {
             return typeof(None);
@@ -41,6 +58,10 @@ namespace Player
             }
 
             internal virtual void Sprint(InputAction.CallbackContext context)
+            {
+            }            
+            
+            internal virtual void Crouch(InputAction.CallbackContext context)
             {
             }
 

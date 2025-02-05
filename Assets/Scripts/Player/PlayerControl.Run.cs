@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Player
 {
     public partial class PlayerControl
     {
-        [SerializeField] [Range(1f, 12f)] private float runSpeed = 6f;
+        [TabGroup("Run")] [SerializeField] [Range(1f, 12f)]
+        private float runSpeed = 5f;
 
         private class Run : Walk
         {

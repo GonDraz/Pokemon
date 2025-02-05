@@ -16,6 +16,11 @@ namespace GonDraz
             if (IsDontDestroyOnLoad()) DontDestroyOnLoad(this);
         }
 
+        protected virtual void OnApplicationQuit() {
+            Instance = null;
+            Destroy(gameObject);
+        }
+        
         protected abstract bool IsDontDestroyOnLoad();
     }
 }

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3670170787986324508}
   - component: {fileID: 6197820123020406422}
+  - component: {fileID: 400807326853689818}
   - component: {fileID: 2115066827511408049}
   - component: {fileID: 4906741888154569904}
-  - component: {fileID: 400807326853689818}
   - component: {fileID: 4422326987137857534}
   m_Layer: 6
   m_Name: Player
@@ -91,6 +91,33 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &400807326853689818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7429386469093193003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a0c1440207739c4b96f63b69d8a1764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentStateName: 
+  previousStateName: 
+  animator: {fileID: 4906741888154569904}
+  solidObjectLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  grassLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  waterLayerMask:
+    serializedVersion: 2
+    m_Bits: 16
+  bicycleSpeed: 10
+  runSpeed: 5
+  walkSpeed: 3
 --- !u!50 &2115066827511408049
 Rigidbody2D:
   serializedVersion: 5
@@ -140,33 +167,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &400807326853689818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7429386469093193003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a0c1440207739c4b96f63b69d8a1764, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentStateName: 
-  previousStateName: 
-  animator: {fileID: 4906741888154569904}
-  bicycleSpeed: 12
-  runSpeed: 6
-  walkSpeed: 4
-  solidObjectLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  grassLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  waterLayerMask:
-    serializedVersion: 2
-    m_Bits: 16
 --- !u!114 &4422326987137857534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,7 +221,19 @@ MonoBehaviour:
     m_ActionId: 852140f2-7766-474d-8707-702459ba45f3
     m_ActionName: 'Player/Interact[/Keyboard/e]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 400807326853689818}
+        m_TargetAssemblyTypeName: Player.PlayerControl, Assembly-CSharp
+        m_MethodName: OnCrouchPlayerInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 27c5f898-bc57-4ee1-8800-db469aca5fe3
     m_ActionName: 'Player/Crouch[/Keyboard/c]'
   - m_PersistentCalls:

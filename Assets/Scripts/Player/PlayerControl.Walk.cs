@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,14 +8,8 @@ namespace Player
 {
     public partial class PlayerControl
     {
-        private static readonly int MoveX = Animator.StringToHash("MoveX");
-        private static readonly int MoveY = Animator.StringToHash("MoveY");
-        private static readonly int IsMoving = Animator.StringToHash("IsMoving");
-        private static readonly int IsRun = Animator.StringToHash("IsRun");
-        [SerializeField] [Range(0.25f, 5f)] private float walkSpeed = 4f;
-        [SerializeField] private LayerMask solidObjectLayerMask;
-        [SerializeField] private LayerMask grassLayerMask;
-        [SerializeField] private LayerMask waterLayerMask;
+        [TabGroup("Walk")] [SerializeField] [Range(0.25f, 5f)]
+        private float walkSpeed = 3f;
 
         private class Walk : PlayerState
         {
