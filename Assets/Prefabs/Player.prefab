@@ -106,6 +106,8 @@ MonoBehaviour:
   currentStateName: 
   previousStateName: 
   animator: {fileID: 4906741888154569904}
+  maleController: {fileID: 9100000, guid: 9dfb68ff03fd87b4787421529fcf0102, type: 2}
+  femaleController: {fileID: 9100000, guid: 058f5567aa1036b489f964d596b6629f, type: 2}
   solidObjectLayerMask:
     serializedVersion: 2
     m_Bits: 128

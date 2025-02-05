@@ -1,5 +1,6 @@
 using System;
 using GonDraz.StateMachine;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +15,15 @@ namespace Player
         private static readonly int IsRun = Animator.StringToHash("IsRun");
         private static readonly int IsBicycle = Animator.StringToHash("IsBicycle");
 
-        [SerializeField] internal Animator animator;
+        [TabGroup("Animator")] [SerializeField]
+        internal Animator animator;
+
+        [TabGroup("Animator")] [SerializeField]
+        private RuntimeAnimatorController maleController;
+
+        [TabGroup("Animator")] [SerializeField]
+        private RuntimeAnimatorController femaleController;
+
 
         [SerializeField] private LayerMask solidObjectLayerMask;
 
@@ -30,6 +39,18 @@ namespace Player
             animator = GetComponent<Animator>();
         }
 #endif
+
+        [TabGroup("Animator")]
+        [Button]
+        private void ChangePlayerGender(Gender gender)
+        {
+            animator.runtimeAnimatorController = gender switch
+            {
+                Gender.Male => maleController,
+                Gender.Female => femaleController,
+                _ => maleController
+            };
+        }
 
         public void OnSprintPlayerInput(InputAction.CallbackContext context)
         {
@@ -49,6 +70,12 @@ namespace Player
         public override Type InitialState()
         {
             return typeof(None);
+        }
+
+        private enum Gender
+        {
+            Male,
+            Female
         }
 
         public abstract class PlayerState : BaseState<PlayerControl, PlayerState>
