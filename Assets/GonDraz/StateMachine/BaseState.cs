@@ -11,7 +11,7 @@ namespace GonDraz.StateMachine
         public TState PreviousState;
         public Event Update = new();
 
-        public TMachine Host { get; private set; }
+        public TMachine Host;
 
         public virtual void OnEnter()
         {

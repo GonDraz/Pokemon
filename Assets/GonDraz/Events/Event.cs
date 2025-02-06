@@ -63,7 +63,7 @@ namespace GonDraz.Events
             if (e._action == null || newAction == null) return false;
             if (!e._action.GetInvocationList().Contains(newAction)) return false;
             Debug.LogError(
-                $"Event <color=yellow>[{e._name}]</color> : has been infected : [{newAction.Method.Name}]"
+                $"Event <color=yellow>[{e._name}]</color> : has been infected : <color=red>[{newAction.Method.Name}]</color>"
             );
             return true;
         }

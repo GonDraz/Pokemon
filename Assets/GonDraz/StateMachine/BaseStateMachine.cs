@@ -13,7 +13,7 @@ namespace GonDraz.StateMachine
         [SerializeField] [ReadOnly] private string currentStateName;
         [SerializeField] [ReadOnly] private string previousStateName;
         private TState _currentState;
-
+        
         private Dictionary<Type, TState> _states;
 
         private Dictionary<Type, TState> States

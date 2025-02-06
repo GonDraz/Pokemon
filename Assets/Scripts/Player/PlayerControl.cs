@@ -91,7 +91,7 @@ namespace Player
             Female
         }
 
-        public abstract class PlayerState : BaseState<PlayerControl, PlayerState>
+        public class PlayerState : BaseState<PlayerControl, PlayerState>
         {
             internal virtual void Move(InputAction.CallbackContext context)
             {
