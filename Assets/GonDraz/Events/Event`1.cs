@@ -15,6 +15,12 @@ namespace GonDraz.Events
             _name = ToString();
         }
 
+        public Event(Action<T> action)
+        {
+            _name = action.Method.Name;
+            _action = action;
+        }
+
         public Event(string name)
         {
             _name = name;
@@ -73,6 +79,11 @@ namespace GonDraz.Events
         {
             e._action -= action;
             return e;
+        }
+
+        public static implicit operator Event<T>(Action<T> action)
+        {
+            return new Event<T>(action);
         }
     }
 }

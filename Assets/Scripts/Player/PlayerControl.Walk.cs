@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Event = GonDraz.Events.Event;
 
 namespace Player
 {
@@ -35,7 +37,7 @@ namespace Player
                     Host.animator.SetBool(IsMoving, true);
 
                     if (IsWalkable(target))
-                        Host.StartCoroutine(MoveTo(target, CheckForEncounters));
+                        MoveTo(target, new Event(CheckForEncounters)).Forget();
                     else
                         Host.animator.SetBool(IsMoving, false);
                 }
@@ -44,7 +46,7 @@ namespace Player
                     NotMovement();
                 }
             }
-
+            
             protected virtual void NotMovement()
             {
                 Host.animator.SetBool(IsMoving, false);
@@ -98,7 +100,7 @@ namespace Player
                 return Physics2D.OverlapCircle(target, 0.25f, Host.grassLayerMask);
             }
 
-            protected IEnumerator MoveTo(Vector3 target, Action callback = null)
+            protected async UniTaskVoid MoveTo(Vector3 target, Event callback = null)  
             {
                 Host._isMoving = true;
                 var speed = MoveSpeed();
@@ -109,14 +111,14 @@ namespace Player
                     transformPosition =
                         Vector3.MoveTowards(transformPosition, target, speed * Time.deltaTime);
                     Host.transform.position = transformPosition;
-                    yield return null;
+                    await UniTask.Yield();
                 }
 
                 Host.transform.position = target;
                 Host._isMoving = false;
                 callback?.Invoke();
             }
-
+            
             public virtual float MoveSpeed()
             {
                 return Host.walkSpeed;

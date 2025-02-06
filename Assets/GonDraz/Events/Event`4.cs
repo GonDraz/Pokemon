@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GonDraz.Events
 {
-    public class Event<T1, T2, T3, T4> : IEvent
+    public sealed class Event<T1, T2, T3, T4> : IEvent
     {
         private readonly string _name;
 
@@ -13,6 +13,12 @@ namespace GonDraz.Events
         public Event()
         {
             _name = ToString();
+        }
+
+        public Event(Action<T1, T2, T3, T4> action)
+        {
+            _name = action.Method.Name;
+            _action = action;
         }
 
         public Event(string name)
@@ -78,6 +84,11 @@ namespace GonDraz.Events
         {
             e._action -= action;
             return e;
+        }
+
+        public static implicit operator Event<T1, T2, T3, T4>(Action<T1, T2, T3, T4> action)
+        {
+            return new Event<T1, T2, T3, T4>(action);
         }
     }
 }
