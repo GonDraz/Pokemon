@@ -28,9 +28,10 @@ namespace GonDraz.Events
 
         public Event(string name, params Action[] actions)
         {
+            _name = name;
             _action = null;
             foreach (var action in actions)
-                if (action != null)
+                if (CheckForDuplicates(this, action))
                     _action += action;
         }
 
