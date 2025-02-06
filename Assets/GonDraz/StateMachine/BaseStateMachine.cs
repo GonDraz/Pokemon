@@ -12,7 +12,7 @@ namespace GonDraz.StateMachine
     {
         [SerializeField] [ReadOnly] private string currentStateName;
         [SerializeField] [ReadOnly] private string previousStateName;
-        private readonly StateMachine<TMachine, TState> _stateMachine = new();
+        private TState _currentState;
 
         private Dictionary<Type, TState> _states;
 
@@ -39,29 +39,28 @@ namespace GonDraz.StateMachine
 
         protected virtual void Awake()
         {
-            ChangeState(InitialState(), false);
+            if (GetCurrentState() == null) ChangeState(InitialState(), false);
         }
 
         private void Update()
         {
-            _stateMachine.OnUpdate();
+            _currentState.OnUpdate();
         }
 
         private void FixedUpdate()
         {
-            _stateMachine.OnFixedUpdate();
+            _currentState.OnFixedUpdate();
         }
 
         private void LateUpdate()
         {
-            _stateMachine.OnLateUpdate();
+            _currentState.OnLateUpdate();
         }
 
         public TState GetCurrentState()
         {
-            return _stateMachine.CurrentState;
+            return _currentState;
         }
-
 
         public bool TryGetState<TType>(out TType state) where TType : TState
         {
@@ -81,26 +80,62 @@ namespace GonDraz.StateMachine
         {
             if (States.TryGetValue(type, out var state))
             {
-                _stateMachine.ChangeState(state, canBack);
-                currentStateName = _stateMachine.CurrentState?.GetType().Name;
-                previousStateName = _stateMachine.CurrentState?.PreviousState?.GetType().Name;
+                ChangeState(state, canBack);
+                currentStateName = _currentState?.GetType().Name;
+                previousStateName = _currentState?.PreviousState?.GetType().Name;
             }
         }
+
 
         public void ChangeState<T1>(bool canBack = true) where T1 : IState
         {
             ChangeState(typeof(T1), canBack);
         }
 
+        public void ChangeState(TState state, bool canBack = true)
+        {
+            if (_currentState == null)
+            {
+                _currentState = state;
+                // Debug.Log("Change state to <color=red>" + CurrentState.GetType().Name + "</color>");
+                _currentState.OnEnter();
+                return;
+            }
+
+            if (state.GetType().FullName == _currentState.GetType().FullName)
+                return;
+
+            _currentState.OnExit();
+
+            // Debug.Log("Change state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
+            //           state.GetType().Name + "</color>");
+
+            var previousState = _currentState;
+            _currentState = state;
+            if (!canBack) previousState = null;
+            _currentState.OnEnter(previousState);
+        }
+
         public bool CanBack()
         {
-            return _stateMachine.CanBack();
+            if (_currentState.PreviousState == null) return false;
+
+            return _currentState.PreviousState.GetType().FullName != _currentState.GetType().FullName;
         }
 
         public void BackToPreviousState()
         {
-            _stateMachine.BackToPreviousState();
-        } // ReSharper disable Unity.PerformanceAnalysis
+            if (!CanBack()) return;
+
+            _currentState.OnExit();
+
+            // Debug.Log("Back state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
+            //           CurrentState.PreviousState.GetType().Name + "</color>");
+
+            _currentState = _currentState.PreviousState;
+            _currentState.OnEnter();
+        }
+
         public void RegisterEvent<TS>(EventState eventState, Action action) where TS : TState
         {
             if (States.TryGetValue(typeof(TS), out var state))

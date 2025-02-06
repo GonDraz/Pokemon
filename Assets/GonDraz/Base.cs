@@ -25,7 +25,7 @@ namespace GonDraz
             }
         }
 
-        public void OnDestroy()
+        protected virtual void OnDestroy()
         {
             _isSubscribe = false;
             Unsubscribe();
