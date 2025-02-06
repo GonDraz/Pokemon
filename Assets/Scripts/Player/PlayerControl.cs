@@ -38,8 +38,7 @@ namespace Player
         {
             animator = GetComponent<Animator>();
         }
-#endif
-
+        
         [TabGroup("Animator")]
         [Button]
         private void ChangePlayerGender(Gender gender)
@@ -51,6 +50,20 @@ namespace Player
                 _ => maleController
             };
         }
+
+        [Button]
+        private void Save()
+        {
+            ES3AutoSaveMgr.Current.Save();
+        }
+
+        [Button]
+        private void Load()
+        {
+            ES3AutoSaveMgr.Current.Load();
+        }
+#endif
+
 
         public void OnSprintPlayerInput(InputAction.CallbackContext context)
         {
