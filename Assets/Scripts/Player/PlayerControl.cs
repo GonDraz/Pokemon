@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
+    [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Animator))]
     public partial class PlayerControl : BaseStateMachine<PlayerControl, PlayerControl.PlayerState>
     {
@@ -15,8 +16,12 @@ namespace Player
         private static readonly int IsRun = Animator.StringToHash("IsRun");
         private static readonly int IsBicycle = Animator.StringToHash("IsBicycle");
 
+        
+        [TabGroup("General")] [SerializeField]
+        private Rigidbody2D rigidbody;
+
         [TabGroup("Animator")] [SerializeField]
-        internal Animator animator;
+        private Animator animator;        
 
         [TabGroup("Animator")] [SerializeField]
         private RuntimeAnimatorController maleController;
@@ -37,6 +42,7 @@ namespace Player
         private void OnValidate()
         {
             animator = GetComponent<Animator>();
+            rigidbody = GetComponent<Rigidbody2D>();
         }
         
         [TabGroup("Animator")]

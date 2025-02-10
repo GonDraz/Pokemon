@@ -110,11 +110,11 @@ namespace Player
                 {
                     transformPosition =
                         Vector3.MoveTowards(transformPosition, target, speed * Time.deltaTime);
-                    Host.transform.position = transformPosition;
+                    Host.rigidbody.MovePosition(transformPosition);
                     await UniTask.Yield();
                 }
 
-                Host.transform.position = target;
+                Host.rigidbody.MovePosition(target);
                 Host._isMoving = false;
                 callback?.Invoke();
             }
