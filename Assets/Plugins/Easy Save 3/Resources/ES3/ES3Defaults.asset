@@ -33,6 +33,8 @@ MonoBehaviour:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     - EasySave3
+    - PrimeTween.Debug
+    - PrimeTween.Demo
     - PrimeTween.Runtime
     - SingularityGroup.HotReload.Runtime
     - SingularityGroup.HotReload.Runtime.Public
