@@ -93,6 +93,7 @@ namespace Player
 
         private enum Gender
         {
+            Other,
             Male,
             Female
         }

@@ -12,28 +12,41 @@ namespace GonDraz.StateMachine
     {
         [SerializeField] [ReadOnly] private string currentStateName;
         [SerializeField] [ReadOnly] private string previousStateName;
+
+        [SerializeField] private bool enableDebugLog; // Có thể bật/tắt log chuyển state
+
+        private readonly object _lock = new();
         private TState _currentState;
-        
+
         private Dictionary<Type, TState> _states;
 
         private Dictionary<Type, TState> States
         {
             get
             {
-                if (_states != null) return _states;
-                _states = new Dictionary<Type, TState>();
-
-                var types = typeof(TMachine).GetNestedTypes(BindingFlags.NonPublic | BindingFlags.Public)
-                    .Where(t => t.IsSubclassOf(typeof(TState)))
-                    .ToArray();
-                foreach (var type in types)
+                lock (_lock)
                 {
-                    var instance = (TState)Activator.CreateInstance(type);
-                    instance.Instance((TMachine)this);
-                    _states.Add(type, instance);
-                }
+                    if (_states != null) return _states;
+                    _states = new Dictionary<Type, TState>();
 
-                return _states;
+                    var types = typeof(TMachine).GetNestedTypes(BindingFlags.NonPublic | BindingFlags.Public)
+                        .Where(t => t.IsSubclassOf(typeof(TState)))
+                        .ToArray();
+                    foreach (var type in types)
+                        try
+                        {
+                            var instance = (TState)Activator.CreateInstance(type, true);
+                            instance.Instance((TMachine)this);
+                            if (!_states.TryAdd(type, instance))
+                                Debug.LogWarning($"Duplicate state type detected: {type.FullName}");
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogError($"Cannot create state {type.FullName}: {ex.Message}");
+                        }
+
+                    return _states;
+                }
             }
         }
 
@@ -78,42 +91,55 @@ namespace GonDraz.StateMachine
 
         public void ChangeState(Type type, bool canBack = true)
         {
-            if (States.TryGetValue(type, out var state))
+            lock (_lock)
             {
-                ChangeState(state, canBack);
-                currentStateName = _currentState?.GetType().Name;
-                previousStateName = _currentState?.PreviousState?.GetType().Name;
+                if (States.TryGetValue(type, out var state))
+                {
+                    ChangeState(state, canBack);
+                    currentStateName = _currentState?.GetType().Name;
+                    previousStateName = _currentState?.PreviousState?.GetType().Name;
+                }
             }
         }
 
 
         public void ChangeState<T1>(bool canBack = true) where T1 : IState
         {
-            ChangeState(typeof(T1), canBack);
+            lock (_lock)
+            {
+                ChangeState(typeof(T1), canBack);
+            }
         }
 
         public void ChangeState(TState state, bool canBack = true)
         {
-            if (_currentState == null)
+            lock (_lock)
             {
+                if (_currentState == null)
+                {
+                    _currentState = state;
+                    if (enableDebugLog)
+                        Debug.Log($"Change state to <color=red>{_currentState.GetType().Name}</color>");
+                    _currentState.OnEnter();
+                    return;
+                }
+
+                if (state.GetType().FullName == _currentState.GetType().FullName)
+                    return;
+
+                if (enableDebugLog)
+                    Debug.Log(
+                        $"Change state from <color=red>{_currentState.GetType().Name}</color> to <color=green>{state.GetType().Name}</color>");
+
+                _currentState.OnExit();
+                var previousState = _currentState;
                 _currentState = state;
-                // Debug.Log("Change state to <color=red>" + CurrentState.GetType().Name + "</color>");
-                _currentState.OnEnter();
-                return;
+                if (!canBack)
+                    previousState = null;
+                else
+                    previousState.PreviousState = null;
+                _currentState.OnEnter(previousState);
             }
-
-            if (state.GetType().FullName == _currentState.GetType().FullName)
-                return;
-
-            _currentState.OnExit();
-
-            // Debug.Log("Change state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
-            //           state.GetType().Name + "</color>");
-
-            var previousState = _currentState;
-            _currentState = state;
-            if (!canBack) previousState = null;
-            _currentState.OnEnter(previousState);
         }
 
         public bool CanBack()
@@ -138,53 +164,58 @@ namespace GonDraz.StateMachine
 
         public void RegisterEvent<TS>(EventState eventState, Action action) where TS : TState
         {
-            if (States.TryGetValue(typeof(TS), out var state))
-                switch (eventState)
-                {
-                    case EventState.Enter:
-                        state.Enter += action;
-                        break;
-                    case EventState.Exit:
-                        state.Exit += action;
-                        break;
-                    case EventState.FixedUpdate:
-                        state.FixedUpdate += action;
-                        break;
-                    case EventState.LateUpdate:
-                        state.LateUpdate += action;
-                        break;
-                    case EventState.Update:
-                        state.Update += action;
-                        break;
-                }
-            else
-                Debug.LogError("Error RegisterEvent: " + eventState + " Can't register Action: " + action);
+            lock (_lock)
+            {
+                if (States.TryGetValue(typeof(TS), out var state))
+                    switch (eventState)
+                    {
+                        case EventState.Enter:
+                            state.Enter += action;
+                            break;
+                        case EventState.Exit:
+                            state.Exit += action;
+                            break;
+                        case EventState.FixedUpdate:
+                            state.FixedUpdate += action;
+                            break;
+                        case EventState.LateUpdate:
+                            state.LateUpdate += action;
+                            break;
+                        case EventState.Update:
+                            state.Update += action;
+                            break;
+                    }
+                else
+                    Debug.LogError($"Error RegisterEvent: {eventState} Can't register Action: {action}");
+            }
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
         public void UnregisterEvent<TS>(EventState eventState, Action action) where TS : TState
         {
-            if (States.TryGetValue(typeof(TS), out var state))
-                switch (eventState)
-                {
-                    case EventState.Enter:
-                        state.Enter -= action;
-                        break;
-                    case EventState.Exit:
-                        state.Exit -= action;
-                        break;
-                    case EventState.FixedUpdate:
-                        state.FixedUpdate -= action;
-                        break;
-                    case EventState.LateUpdate:
-                        state.LateUpdate -= action;
-                        break;
-                    case EventState.Update:
-                        state.Update -= action;
-                        break;
-                }
-            else
-                Debug.LogError("Error UnregisterEvent: " + eventState + " Can't unregister Action: " + action);
+            lock (_lock)
+            {
+                if (States.TryGetValue(typeof(TS), out var state))
+                    switch (eventState)
+                    {
+                        case EventState.Enter:
+                            state.Enter -= action;
+                            break;
+                        case EventState.Exit:
+                            state.Exit -= action;
+                            break;
+                        case EventState.FixedUpdate:
+                            state.FixedUpdate -= action;
+                            break;
+                        case EventState.LateUpdate:
+                            state.LateUpdate -= action;
+                            break;
+                        case EventState.Update:
+                            state.Update -= action;
+                            break;
+                    }
+                else
+                    Debug.LogError($"Error UnregisterEvent: {eventState} Can't unregister Action: {action}");
+            }
         }
     }
 }

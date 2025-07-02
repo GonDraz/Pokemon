@@ -1,41 +1,49 @@
-using GonDraz.Events;
+using System;
 
 namespace GonDraz.StateMachine
 {
     public class BaseState<TMachine, TState> : IState
     {
-        public Event Enter = new();
-        public Event Exit = new();
-        public Event FixedUpdate = new();
-        public Event LateUpdate = new();
-        public TState PreviousState;
-        public Event Update = new();
-
         public TMachine Host;
+        public TState PreviousState;
 
         public virtual void OnEnter()
         {
-            Enter.Invoke();
+            Enter?.Invoke();
         }
 
         public virtual void OnUpdate()
         {
-            Update.Invoke();
+            Update?.Invoke();
         }
 
         public virtual void OnLateUpdate()
         {
-            LateUpdate.Invoke();
+            LateUpdate?.Invoke();
         }
 
         public virtual void OnFixedUpdate()
         {
-            FixedUpdate.Invoke();
+            FixedUpdate?.Invoke();
         }
 
         public virtual void OnExit()
         {
-            Exit.Invoke();
+            Exit?.Invoke();
+        }
+
+        public event Action Enter;
+        public event Action Exit;
+        public event Action FixedUpdate;
+        public event Action LateUpdate;
+        public event Action Update;
+
+        public virtual void OnPause()
+        {
+        }
+
+        public virtual void OnResume()
+        {
         }
 
         public virtual void Instance(TMachine host)

@@ -8,14 +8,20 @@ namespace GonDraz.StateMachine
 
         protected override void Awake()
         {
-            if (Instance != null)
+            if (Instance)
             {
                 Destroy(this);
                 return;
             }
 
             Instance = this as TMachine;
+            DontDestroyOnLoad(this);
             base.Awake();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
 
         public abstract class BaseGlobalState : BaseState<TMachine, BaseGlobalState>

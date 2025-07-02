@@ -8,13 +8,6 @@ namespace GonDraz
     {
         private static readonly Lazy<T> LazyInstance = new(CreateSingleton);
         public static T Inst => LazyInstance.Value;
-
-        private static T CreateSingleton()
-        {
-            var obj = new GameObject("(Singleton)" + typeof(T).Name);
-            DontDestroyOnLoad(obj);
-            return obj.AddComponent<T>();
-        }
 #if UNITY_EDITOR
         protected virtual void Reset()
         {
@@ -24,5 +17,12 @@ namespace GonDraz
             DestroyImmediate(this);
         }
 #endif
+
+        private static T CreateSingleton()
+        {
+            var obj = new GameObject("(Singleton)" + typeof(T).Name);
+            DontDestroyOnLoad(obj);
+            return obj.AddComponent<T>();
+        }
     }
 }
