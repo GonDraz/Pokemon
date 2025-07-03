@@ -107,6 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStateName: 
   previousStateName: 
+  enableDebugLog: 0
   rigidbody: {fileID: 2115066827511408049}
   animator: {fileID: 4906741888154569904}
   maleController: {fileID: 9100000, guid: 9dfb68ff03fd87b4787421529fcf0102, type: 2}
@@ -371,5 +372,5 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.5}
-  m_Size: {x: 0.75, y: 1}
+  m_Size: {x: 0.75, y: 0.9}
   m_Direction: 0
