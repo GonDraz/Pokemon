@@ -9,20 +9,16 @@ namespace GonDraz
 
         protected virtual void OnEnable()
         {
-            if (SubscribeUsingOnEnable() && !_isSubscribe)
-            {
-                _isSubscribe = true;
-                Subscribe();
-            }
+            if (!SubscribeUsingOnEnable() || _isSubscribe) return;
+            _isSubscribe = true;
+            Subscribe();
         }
 
         protected virtual void OnDisable()
         {
-            if (UnsubscribeUsingOnDisable() && _isSubscribe)
-            {
-                _isSubscribe = false;
-                Unsubscribe();
-            }
+            if (!UnsubscribeUsingOnDisable() || !_isSubscribe) return;
+            _isSubscribe = false;
+            Unsubscribe();
         }
 
         protected virtual void OnDestroy()

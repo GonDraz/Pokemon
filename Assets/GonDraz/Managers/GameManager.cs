@@ -41,7 +41,8 @@ namespace GonDraz.Managers
             foreach (var manager in ComponentInits())
             {
                 Debug.Log("Init : <color=blue>" + manager.Name + "</color>");
-                app.AddComponent(manager);
+                var managerObject = new GameObject { name = manager.Name };
+                managerObject.AddComponent(manager);
             }
         }
 

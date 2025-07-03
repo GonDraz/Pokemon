@@ -10,7 +10,7 @@ public class GlobalStateMachine : BaseGlobalStateMachine<GlobalStateMachine>
     {
     }
 
-    public override Type InitialState()
+    protected override Type InitialState()
     {
         return typeof(PreLoaderState);
     }

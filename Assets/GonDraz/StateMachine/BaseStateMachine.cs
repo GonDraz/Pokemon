@@ -70,12 +70,12 @@ namespace GonDraz.StateMachine
             _currentState.OnLateUpdate();
         }
 
-        public TState GetCurrentState()
+        protected TState GetCurrentState()
         {
             return _currentState;
         }
 
-        public bool TryGetState<TType>(out TType state) where TType : TState
+        protected bool TryGetState<TType>(out TType state) where TType : TState
         {
             if (States.TryGetValue(typeof(TType), out var value))
             {
@@ -87,21 +87,23 @@ namespace GonDraz.StateMachine
             return false;
         }
 
-        public abstract Type InitialState();
+        protected abstract Type InitialState();
 
-        public void ChangeState(Type type, bool canBack = true)
+        protected void ChangeState(string stateName, bool canBack = true)
         {
             lock (_lock)
             {
-                if (States.TryGetValue(type, out var state))
+                var stateType = States.Keys.FirstOrDefault(t => t.Name == stateName);
+                if (stateType != null)
                 {
-                    ChangeState(state, canBack);
-                    currentStateName = _currentState?.GetType().Name;
-                    previousStateName = _currentState?.PreviousState?.GetType().Name;
+                    ChangeState(stateType, canBack);
+                }
+                else
+                {
+                    Debug.LogError($"State with name '{stateName}' not found.");
                 }
             }
         }
-
 
         public void ChangeState<T1>(bool canBack = true) where T1 : IState
         {
@@ -111,7 +113,18 @@ namespace GonDraz.StateMachine
             }
         }
 
-        public void ChangeState(TState state, bool canBack = true)
+        private void ChangeState(Type type, bool canBack = true)
+        {
+            lock (_lock)
+            {
+                if (!States.TryGetValue(type, out var state)) return;
+                currentStateName = _currentState?.GetType().Name;
+                previousStateName = _currentState?.PreviousState?.GetType().Name;
+                ChangeState(state, canBack);
+            }
+        }
+
+        private void ChangeState(TState state, bool canBack = true)
         {
             lock (_lock)
             {
@@ -142,14 +155,14 @@ namespace GonDraz.StateMachine
             }
         }
 
-        public bool CanBack()
+        protected bool CanBack()
         {
             if (_currentState.PreviousState == null) return false;
 
             return _currentState.PreviousState.GetType().FullName != _currentState.GetType().FullName;
         }
 
-        public void BackToPreviousState()
+        protected void BackToPreviousState()
         {
             if (!CanBack()) return;
 

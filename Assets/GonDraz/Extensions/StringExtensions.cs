@@ -127,7 +127,9 @@ namespace GonDraz.Extensions
         /// </summary>
         public static string[] SplitAndRemoveEmpty(this string s, params char[] separator)
         {
-            return string.IsNullOrEmpty(s) ? Array.Empty<string>() : s.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+            return string.IsNullOrEmpty(s)
+                ? Array.Empty<string>()
+                : s.Split(separator, StringSplitOptions.RemoveEmptyEntries);
         }
 
         /// <summary>

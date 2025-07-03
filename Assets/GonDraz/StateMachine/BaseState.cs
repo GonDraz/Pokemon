@@ -61,5 +61,15 @@ namespace GonDraz.StateMachine
         {
             PreviousState = previousState;
         }
+
+        public override string ToString()
+        {
+            return $"{GetName()} (Host: {Host?.GetType().Name}, PreviousState: {PreviousState})";
+        }
+
+        public string GetName()
+        {
+            return GetType().Name;
+        }
     }
 }

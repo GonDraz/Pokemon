@@ -51,7 +51,7 @@ namespace Player
             GetCurrentState().Crouch(context);
         }
 
-        public override Type InitialState()
+        protected override Type InitialState()
         {
             return typeof(None);
         }

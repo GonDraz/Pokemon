@@ -19,7 +19,7 @@ namespace GonDraz.StateMachine
             base.Awake();
         }
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
             if (Instance == this) Instance = null;
         }

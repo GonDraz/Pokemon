@@ -1,6 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace GonDraz.Scene
@@ -17,6 +18,28 @@ namespace GonDraz.Scene
         public static implicit operator string(SceneField sceneField)
         {
             return sceneField.SceneName;
+        }
+
+        public void LoadScene()
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var loadedScene = SceneManager.GetSceneAt(i);
+                if (loadedScene.name == SceneName)
+                {
+                    return;
+                }
+            }
+            SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Additive);
+        }
+
+        public void UnloadScene()
+        {
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var loadedScene = SceneManager.GetSceneAt(i);
+                if (loadedScene.name == SceneName) SceneManager.UnloadSceneAsync(this);
+            }
         }
     }
 #if UNITY_EDITOR
