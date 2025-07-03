@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using GonDraz;
-using GonDraz.Scene;
 using UnityEngine;
 
 public class Map : Base
 {
     [SerializeField] private List<Map> mapsLoad;
     [SerializeField] private List<Map> mapsUnload;
-    
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         UnloadMaps();
@@ -25,19 +23,13 @@ public class Map : Base
     //     Debug.Log("OnTriggerStay2D");
     // }
 
-    void LoadMaps()
+    private void LoadMaps()
     {
-        foreach (var map in mapsLoad)
-        {
-            map.Active();
-        }
+        foreach (var map in mapsLoad) map.Active();
     }
-    
-    void UnloadMaps()
+
+    private void UnloadMaps()
     {
-        foreach (var map in mapsUnload)
-        {
-            map.Inactive();
-        }
+        foreach (var map in mapsUnload) map.Inactive();
     }
 }

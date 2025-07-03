@@ -16,12 +16,10 @@ namespace Player
         private static readonly int IsRun = Animator.StringToHash("IsRun");
         private static readonly int IsBicycle = Animator.StringToHash("IsBicycle");
 
-        
-        [TabGroup("General")] [SerializeField]
-        private Rigidbody2D rigidbody;
+        [TabGroup("General")] [SerializeField] private Rigidbody2D rigidbody;
 
         [TabGroup("Animator")] [SerializeField]
-        private Animator animator;        
+        private Animator animator;
 
         [TabGroup("Animator")] [SerializeField]
         private RuntimeAnimatorController maleController;
@@ -36,39 +34,6 @@ namespace Player
 
         [SerializeField] private LayerMask waterLayerMask;
         private bool _isMoving;
-
-#if UNITY_EDITOR
-
-        private void OnValidate()
-        {
-            animator = GetComponent<Animator>();
-            rigidbody = GetComponent<Rigidbody2D>();
-        }
-        
-        [TabGroup("Animator")]
-        [Button]
-        private void ChangePlayerGender(Gender gender)
-        {
-            animator.runtimeAnimatorController = gender switch
-            {
-                Gender.Male => maleController,
-                Gender.Female => femaleController,
-                _ => maleController
-            };
-        }
-
-        [Button]
-        private void Save()
-        {
-            ES3AutoSaveMgr.Current.Save();
-        }
-
-        [Button]
-        private void Load()
-        {
-            ES3AutoSaveMgr.Current.Load();
-        }
-#endif
 
 
         public void OnSprintPlayerInput(InputAction.CallbackContext context)
@@ -156,5 +121,38 @@ namespace Player
                     Host.ChangeState<Idle>(false);
             }
         }
+
+#if UNITY_EDITOR
+
+        private void OnValidate()
+        {
+            animator = GetComponent<Animator>();
+            rigidbody = GetComponent<Rigidbody2D>();
+        }
+
+        [TabGroup("Animator")]
+        [Button]
+        private void ChangePlayerGender(Gender gender)
+        {
+            animator.runtimeAnimatorController = gender switch
+            {
+                Gender.Male => maleController,
+                Gender.Female => femaleController,
+                _ => maleController
+            };
+        }
+
+        [Button]
+        private void Save()
+        {
+            ES3AutoSaveMgr.Current.Save();
+        }
+
+        [Button]
+        private void Load()
+        {
+            ES3AutoSaveMgr.Current.Load();
+        }
+#endif
     }
 }

@@ -23,19 +23,17 @@ namespace Player
                 Host.animator.SetBool(IsRun, false);
             }
 
-            public override float MoveSpeed()
+            protected override float MoveSpeed()
             {
                 return Host.runSpeed;
             }
 
             internal override void Sprint(InputAction.CallbackContext context)
             {
-                if (!context.control.IsPressed())
-                    if (Host.TryGetState<Walk>(out var state))
-                    {
-                        state._movement = _movement;
-                        Host.ChangeState<Walk>();
-                    }
+                if (context.control.IsPressed()) return;
+                if (!Host.TryGetState<Walk>(out var state)) return;
+                state.Movement = Movement;
+                Host.ChangeState<Walk>();
             }
         }
     }

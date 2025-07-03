@@ -21,7 +21,7 @@ namespace Player
             {
             }
 
-            public override float MoveSpeed()
+            protected override float MoveSpeed()
             {
                 return Host.bicycleSpeed;
             }
