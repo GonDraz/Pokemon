@@ -1,5 +1,6 @@
-using GonDraz.Managers;
+using Managers;
 using UnityEngine;
+using EventManager = GonDraz.Managers.EventManager;
 
 namespace GonDraz.UI.Route
 {

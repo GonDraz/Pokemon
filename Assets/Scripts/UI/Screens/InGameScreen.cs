@@ -1,5 +1,6 @@
-﻿using GonDraz.Managers;
-using GonDraz.UI;
+﻿using GonDraz.UI;
+using Managers;
+using EventManager = GonDraz.Managers.EventManager;
 
 namespace UI.Screens
 {

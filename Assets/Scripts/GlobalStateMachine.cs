@@ -1,8 +1,9 @@
 ﻿using System;
-using GonDraz.Managers;
 using GonDraz.StateMachine;
 using GonDraz.UI.Route;
+using Managers;
 using UI.Screens;
+using EventManager = GonDraz.Managers.EventManager;
 
 public class GlobalStateMachine : BaseGlobalStateMachine<GlobalStateMachine>
 {

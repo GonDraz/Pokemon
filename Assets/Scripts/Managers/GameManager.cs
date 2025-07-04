@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Map;
 using UnityEngine;
 
-namespace GonDraz.Managers
+namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
@@ -17,19 +18,20 @@ namespace GonDraz.Managers
 
         private void OnApplicationFocus(bool hasFocus)
         {
-            EventManager.ApplicationPause.Invoke(!hasFocus);
+            GonDraz.Managers.EventManager.ApplicationPause.Invoke(!hasFocus);
         }
 
         private void OnApplicationPause(bool pauseStatus)
         {
-            EventManager.ApplicationPause.Invoke(pauseStatus);
+            GonDraz.Managers.EventManager.ApplicationPause.Invoke(pauseStatus);
         }
 
         protected static List<Type> ComponentInits()
         {
             return new List<Type>
             {
-                typeof(GlobalStateMachine)
+                typeof(GlobalStateMachine),
+                typeof(MapControl)
             };
         }
 
@@ -48,7 +50,7 @@ namespace GonDraz.Managers
 
         private void ApplicationLoadFinished()
         {
-            EventManager.ApplicationLoadFinished.Invoke();
+            GonDraz.Managers.EventManager.ApplicationLoadFinished.Invoke();
         }
     }
 }

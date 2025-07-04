@@ -1,16 +1,28 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using GonDraz.Managers;
 using GonDraz.Scene;
 using GonDraz.StateMachine;
+using Managers;
 using UnityEngine;
+using EventManager = GonDraz.Managers.EventManager;
 
 namespace Map
 {
     public partial class MapControl : BaseStateMachine<MapControl, MapControl.MapState>
     {
-        [SerializeField] private List<SceneField> mapScenes;
+        private MapConfig mapConfig;
+
+        private MapConfig MapConfig
+        {
+            get
+            {
+                if (mapConfig == null)
+                {
+                    mapConfig = Resources.Load<MapConfig>("Map/MapConfig");
+                }
+                return mapConfig;
+            }
+        }
 
         protected override Type InitialState()
         {
@@ -49,7 +61,7 @@ namespace Map
                 List<Type> scenes = new() { GetType() };
                 scenes.AddRange(ScenesToLoad());
 
-                foreach (SceneField mapScene in Host.mapScenes)
+                foreach (SceneField mapScene in Host.MapConfig.GetMapScenes())
                 {
                     foreach (var scene in scenes)
                     {
@@ -60,7 +72,7 @@ namespace Map
                     }
                 }
                 
-                foreach (SceneField mapScene in Host.mapScenes)
+                foreach (SceneField mapScene in Host.MapConfig.GetMapScenes())
                 {
                     bool sceneLoad = false;
                     foreach (var scene in scenes)

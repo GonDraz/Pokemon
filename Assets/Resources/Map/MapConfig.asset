@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 212e47010ff542e3a04307535ceab18d, type: 3}
+  m_Name: MapConfig
+  m_EditorClassIdentifier: 
+  mapScenes:
+  - sceneAsset: {fileID: 102900000, guid: c2dea4c778ef4d34480f5d4ce2436d05, type: 3}
+    sceneName: PalletTown
+  - sceneAsset: {fileID: 102900000, guid: 98a53580b0ae15d4cad2bc9288748340, type: 3}
+    sceneName: Route1
+  - sceneAsset: {fileID: 102900000, guid: c8360935a76c263478c35d77128765e3, type: 3}
+    sceneName: Route21

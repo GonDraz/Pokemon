@@ -2,12 +2,10 @@
 
 namespace GonDraz.Managers
 {
-    public abstract class EventManager
+    public partial class EventManager
     {
         public static Event ApplicationLoadFinished = new("ApplicationLoadFinished");
         public static Event<bool> ApplicationPause = new("ApplicationPause");
         public static Event GamePause = new("GamePause");
-
-        public static Event<string> MapTriggerEnter = new("MapTriggerEnter");
     }
 }

@@ -12,26 +12,17 @@ namespace Player
         [TabGroup("Walk")] [SerializeField] [Range(0.25f, 5f)]
         private float walkSpeed = 3f;
         
-        private void OnDrawGizmosSelected()
-        {
-            // Vẽ gizmo cho vùng kiểm tra va chạm walkable
-            Gizmos.color = Color.red;
-            var pos = transform.position;
-            pos.y -= 0.5f; // TargetYOffset
-            Gizmos.DrawWireSphere(pos, 0.4875f); // OverlapCircleRadius
-        }
 
         public class Walk : PlayerState
         {
             private const float TargetYOffset = 0.5f;
-            private const float OverlapCircleRadius = 0.4875f;
 
             internal Vector2 Movement;
 
             private bool IsWalkable(Vector3 target)
             {
                 target.y -= TargetYOffset;
-                return !Physics2D.OverlapCircle(target, OverlapCircleRadius, Host.solidObjectLayerMask);
+                return !Physics2D.OverlapBox(target, Vector2.one * 0.95f, 0f, Host.solidObjectLayerMask);
             }
 
             public override void OnUpdate()
@@ -100,13 +91,13 @@ namespace Player
             private bool IsWater(Vector3 target)
             {
                 target.y -= TargetYOffset;
-                return Physics2D.OverlapCircle(target, OverlapCircleRadius, Host.waterLayerMask);
+                return Physics2D.OverlapBox(target, Vector2.one * 0.95f, 0f, Host.waterLayerMask);
             }
 
             private bool IsGrass(Vector3 target)
             {
                 target.y -= TargetYOffset;
-                return Physics2D.OverlapCircle(target, OverlapCircleRadius, Host.grassLayerMask);
+                return Physics2D.OverlapBox(target, Vector2.one * 0.95f, 0f, Host.grassLayerMask);
             }
 
             private async UniTaskVoid MoveTo(Vector3 target, Event callback = null)

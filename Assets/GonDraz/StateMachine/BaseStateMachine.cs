@@ -118,9 +118,9 @@ namespace GonDraz.StateMachine
             lock (_lock)
             {
                 if (!States.TryGetValue(type, out var state)) return;
+                ChangeState(state, canBack);
                 currentStateName = _currentState?.GetType().Name;
                 previousStateName = _currentState?.PreviousState?.GetType().Name;
-                ChangeState(state, canBack);
             }
         }
 
