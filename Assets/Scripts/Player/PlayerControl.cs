@@ -16,7 +16,7 @@ namespace Player
         private static readonly int IsRun = Animator.StringToHash("IsRun");
         private static readonly int IsBicycle = Animator.StringToHash("IsBicycle");
 
-        [TabGroup("General")] [SerializeField] private Rigidbody2D rigidbody;
+        [TabGroup("General")] [SerializeField] private new Rigidbody2D rigidbody;
 
         [TabGroup("Animator")] [SerializeField]
         private Animator animator;

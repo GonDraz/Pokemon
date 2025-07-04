@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,11 +11,20 @@ namespace Player
     {
         [TabGroup("Walk")] [SerializeField] [Range(0.25f, 5f)]
         private float walkSpeed = 3f;
+        
+        private void OnDrawGizmosSelected()
+        {
+            // Vẽ gizmo cho vùng kiểm tra va chạm walkable
+            Gizmos.color = Color.red;
+            var pos = transform.position;
+            pos.y -= 0.5f; // TargetYOffset
+            Gizmos.DrawWireSphere(pos, 0.4875f); // OverlapCircleRadius
+        }
 
-        private class Walk : PlayerState
+        public class Walk : PlayerState
         {
             private const float TargetYOffset = 0.5f;
-            private const float OverlapCircleRadius = 0.45f;
+            private const float OverlapCircleRadius = 0.4875f;
 
             internal Vector2 Movement;
 

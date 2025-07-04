@@ -22,15 +22,20 @@ namespace GonDraz.Scene
 
         public void LoadScene()
         {
-            for (int i = 0; i < SceneManager.sceneCount; i++)
+            var isSceneLoaded = false;
+            for (var i = 0; i < SceneManager.sceneCount; i++)
             {
                 var loadedScene = SceneManager.GetSceneAt(i);
                 if (loadedScene.name == SceneName)
                 {
-                    return;
+                    isSceneLoaded = true;
                 }
             }
-            SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Additive);
+
+            if (!isSceneLoaded)
+            {
+                SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Additive);
+            }
         }
 
         public void UnloadScene()
@@ -38,7 +43,10 @@ namespace GonDraz.Scene
             for (var i = 0; i < SceneManager.sceneCount; i++)
             {
                 var loadedScene = SceneManager.GetSceneAt(i);
-                if (loadedScene.name == SceneName) SceneManager.UnloadSceneAsync(this);
+                if (loadedScene.name == SceneName)
+                {
+                    SceneManager.UnloadSceneAsync(SceneName);
+                }
             }
         }
     }
@@ -57,7 +65,7 @@ namespace GonDraz.Scene
                 sceneAsset.objectReferenceValue = EditorGUI.ObjectField(position, sceneAsset.objectReferenceValue,
                     typeof(SceneAsset), false);
 
-                if (sceneAsset.objectReferenceValue != null)
+                if (sceneAsset.objectReferenceValue)
                     sceneName.stringValue = (sceneAsset.objectReferenceValue as SceneAsset)?.name;
             }
 

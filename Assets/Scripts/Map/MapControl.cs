@@ -49,17 +49,32 @@ namespace Map
                 List<Type> scenes = new() { GetType() };
                 scenes.AddRange(ScenesToLoad());
 
-                foreach (var mapScene in from mapScene in Host.mapScenes
-                         from scene in scenes
-                         where scene.Name == mapScene.SceneName
-                         select mapScene)
-                    mapScene.LoadScene();
-
-                foreach (var mapScene in from mapScene in Host.mapScenes
-                         from scene in scenes
-                         where scene.Name != mapScene.SceneName
-                         select mapScene)
-                    mapScene.UnloadScene();
+                foreach (SceneField mapScene in Host.mapScenes)
+                {
+                    foreach (var scene in scenes)
+                    {
+                        if (scene.Name == mapScene.SceneName)
+                        {
+                            mapScene.LoadScene();
+                        }
+                    }
+                }
+                
+                foreach (SceneField mapScene in Host.mapScenes)
+                {
+                    bool sceneLoad = false;
+                    foreach (var scene in scenes)
+                    {
+                        if (scene.Name == mapScene.SceneName)
+                        {
+                            sceneLoad = true;
+                        }
+                    }
+                    if(!sceneLoad) 
+                    {
+                        mapScene.UnloadScene();
+                    }
+                }
             }
 
             protected abstract List<Type> ScenesToLoad();

@@ -5,7 +5,7 @@ namespace Player
 {
     public partial class PlayerControl
     {
-        private class BicycleStandStill : PlayerState
+        public class BicycleStandStill : PlayerState
         {
             internal override void Move(InputAction.CallbackContext context)
             {

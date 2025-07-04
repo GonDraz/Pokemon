@@ -9,7 +9,7 @@ namespace Player
         [TabGroup("MoveBicycle")] [SerializeField] [Range(2f, 20f)]
         private float bicycleSpeed = 10f;
 
-        private class MoveBicycle : Walk
+        public class MoveBicycle : Walk
         {
             protected override void NotMovement()
             {

@@ -9,7 +9,7 @@ namespace Player
         [TabGroup("Run")] [SerializeField] [Range(1f, 12f)]
         private float runSpeed = 5f;
 
-        private class Run : Walk
+        public class Run : Walk
         {
             public override void OnEnter()
             {

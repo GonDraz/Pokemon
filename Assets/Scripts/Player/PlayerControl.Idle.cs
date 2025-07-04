@@ -5,7 +5,7 @@ namespace Player
 {
     public partial class PlayerControl
     {
-        private class Idle : PlayerState
+        public class Idle : PlayerState
         {
             internal override void Move(InputAction.CallbackContext context)
             {
