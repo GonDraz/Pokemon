@@ -8,11 +8,10 @@ namespace Map
     public class MapConfig : ScriptableObject
     {
         [SerializeField] private List<SceneField> mapScenes;
-        
+
         public List<SceneField> GetMapScenes()
         {
             return mapScenes;
         }
-
     }
 }

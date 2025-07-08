@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GonDraz.Managers;
 using Map;
 using UnityEngine;
 
@@ -18,12 +19,12 @@ namespace Managers
 
         private void OnApplicationFocus(bool hasFocus)
         {
-            GonDraz.Managers.EventManager.ApplicationPause.Invoke(!hasFocus);
+            EventManager.ApplicationPause.Invoke(!hasFocus);
         }
 
         private void OnApplicationPause(bool pauseStatus)
         {
-            GonDraz.Managers.EventManager.ApplicationPause.Invoke(pauseStatus);
+            EventManager.ApplicationPause.Invoke(pauseStatus);
         }
 
         protected static List<Type> ComponentInits()
@@ -50,7 +51,7 @@ namespace Managers
 
         private void ApplicationLoadFinished()
         {
-            GonDraz.Managers.EventManager.ApplicationLoadFinished.Invoke();
+            EventManager.ApplicationLoadFinished.Invoke();
         }
     }
 }

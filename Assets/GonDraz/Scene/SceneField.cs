@@ -1,7 +1,6 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace GonDraz.Scene
@@ -10,46 +9,28 @@ namespace GonDraz.Scene
     public class SceneField
     {
         [SerializeField] private Object sceneAsset;
-
         [SerializeField] private string sceneName = "";
 
         public string SceneName => sceneName;
+
+        public bool IsLoaded => SceneLoaderService.IsSceneLoaded(SceneName);
 
         public static implicit operator string(SceneField sceneField)
         {
             return sceneField.SceneName;
         }
 
-        public void LoadScene()
+        public void LoadSceneAsync()
         {
-            var isSceneLoaded = false;
-            for (var i = 0; i < SceneManager.sceneCount; i++)
-            {
-                var loadedScene = SceneManager.GetSceneAt(i);
-                if (loadedScene.name == SceneName)
-                {
-                    isSceneLoaded = true;
-                }
-            }
-
-            if (!isSceneLoaded)
-            {
-                SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Additive);
-            }
+            SceneLoaderService.LoadSceneAsync(SceneName);
         }
 
-        public void UnloadScene()
+        public void UnloadSceneAsync()
         {
-            for (var i = 0; i < SceneManager.sceneCount; i++)
-            {
-                var loadedScene = SceneManager.GetSceneAt(i);
-                if (loadedScene.name == SceneName)
-                {
-                    SceneManager.UnloadSceneAsync(SceneName);
-                }
-            }
+            SceneLoaderService.UnloadSceneAsync(SceneName);
         }
     }
+
 #if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(SceneField))]
     public class SceneFieldPropertyDrawer : PropertyDrawer

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using GonDraz.Scene;
+using System.Linq;
 using GonDraz.StateMachine;
-using Managers;
 using UnityEngine;
 using EventManager = GonDraz.Managers.EventManager;
 
@@ -16,10 +15,7 @@ namespace Map
         {
             get
             {
-                if (mapConfig == null)
-                {
-                    mapConfig = Resources.Load<MapConfig>("Map/MapConfig");
-                }
+                if (mapConfig == null) mapConfig = Resources.Load<MapConfig>("Map/MapConfig");
                 return mapConfig;
             }
         }
@@ -33,13 +29,12 @@ namespace Map
         {
             return true;
         }
-        
+
         public override void Subscribe()
         {
             base.Subscribe();
             EventManager.MapTriggerEnter += OnMapTriggerEnter;
         }
-
 
         public override void Unsubscribe()
         {
@@ -58,34 +53,19 @@ namespace Map
             {
                 base.OnEnter();
 
-                List<Type> scenes = new() { GetType() };
-                scenes.AddRange(ScenesToLoad());
+                var requiredScenes = new List<Type> { GetType() };
+                requiredScenes.AddRange(ScenesToLoad());
 
-                foreach (SceneField mapScene in Host.MapConfig.GetMapScenes())
+                foreach (var mapScene in Host.MapConfig.GetMapScenes())
                 {
-                    foreach (var scene in scenes)
-                    {
-                        if (scene.Name == mapScene.SceneName)
-                        {
-                            mapScene.LoadScene();
-                        }
-                    }
+                    var shouldBeLoaded = requiredScenes.Any(s => s.Name == mapScene.SceneName);
+                    if (!shouldBeLoaded) mapScene.UnloadSceneAsync();
                 }
-                
-                foreach (SceneField mapScene in Host.MapConfig.GetMapScenes())
+
+                foreach (var mapScene in Host.MapConfig.GetMapScenes())
                 {
-                    bool sceneLoad = false;
-                    foreach (var scene in scenes)
-                    {
-                        if (scene.Name == mapScene.SceneName)
-                        {
-                            sceneLoad = true;
-                        }
-                    }
-                    if(!sceneLoad) 
-                    {
-                        mapScene.UnloadScene();
-                    }
+                    var shouldBeLoaded = requiredScenes.Any(s => s.Name == mapScene.SceneName);
+                    if (shouldBeLoaded) mapScene.LoadSceneAsync();
                 }
             }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using GonDraz.StateMachine;
 using GonDraz.UI.Route;
-using Managers;
 using UI.Screens;
 using EventManager = GonDraz.Managers.EventManager;
 

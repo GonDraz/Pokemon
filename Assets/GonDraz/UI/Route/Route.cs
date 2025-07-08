@@ -1,4 +1,3 @@
-using Managers;
 using UnityEngine;
 using EventManager = GonDraz.Managers.EventManager;
 

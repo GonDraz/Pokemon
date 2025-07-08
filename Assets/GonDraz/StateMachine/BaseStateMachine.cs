@@ -95,13 +95,9 @@ namespace GonDraz.StateMachine
             {
                 var stateType = States.Keys.FirstOrDefault(t => t.Name == stateName);
                 if (stateType != null)
-                {
                     ChangeState(stateType, canBack);
-                }
                 else
-                {
                     Debug.LogError($"State with name '{stateName}' not found.");
-                }
             }
         }
 

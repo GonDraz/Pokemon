@@ -1,5 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +10,7 @@ namespace Player
     {
         [TabGroup("Walk")] [SerializeField] [Range(0.25f, 5f)]
         private float walkSpeed = 3f;
-        
+
 
         public class Walk : PlayerState
         {
@@ -34,6 +33,10 @@ namespace Player
                     var target = Host.transform.position;
                     target.x += Mathf.CeilToInt(Movement.x);
                     target.y += Mathf.CeilToInt(Movement.y);
+
+                    target.x = Mathf.Floor(target.x) + 0.5f;
+                    target.y = Mathf.Round(target.y);
+
                     Host.animator.SetFloat(MoveX, Movement.x);
                     Host.animator.SetFloat(MoveY, Movement.y);
                     Host.animator.SetBool(IsMoving, true);
@@ -104,14 +107,21 @@ namespace Player
             {
                 Host._isMoving = true;
                 var speed = MoveSpeed();
+                var startPos = Host.transform.position;
 
-                var transformPosition = Host.transform.position;
-                while ((target - transformPosition).sqrMagnitude > Mathf.Epsilon)
+                target.x = Mathf.Floor(target.x) + 0.5f;
+                target.y = Mathf.Round(target.y);
+
+                var time = 0f;
+                var duration = 1f / speed;
+
+                while (time < duration)
                 {
-                    transformPosition =
-                        Vector3.MoveTowards(transformPosition, target, speed * Time.deltaTime);
-                    Host.rigidbody.MovePosition(transformPosition);
-                    await UniTask.Yield();
+                    time += Time.fixedDeltaTime;
+                    var t = Mathf.Clamp01(time / duration);
+                    var newPos = Vector3.Lerp(startPos, target, t);
+                    Host.rigidbody.MovePosition(newPos);
+                    await UniTask.WaitForFixedUpdate();
                 }
 
                 Host.rigidbody.MovePosition(target);
