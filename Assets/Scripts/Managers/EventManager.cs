@@ -4,6 +4,6 @@ namespace GonDraz.Managers
 {
     public partial class EventManager
     {
-        public static Event<string> MapTriggerEnter = new("MapTriggerEnter");
+        public static GEvent<string> MapTriggerEnter = new("MapTriggerEnter");
     }
 }

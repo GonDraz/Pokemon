@@ -4,29 +4,29 @@ using UnityEngine;
 
 namespace GonDraz.Events
 {
-    public sealed class Event : IEvent
+    public sealed class GEvent<T1, T2>
     {
         private readonly string _name;
 
-        private Action _action;
+        private Action<T1, T2> _action;
 
-        public Event()
+        public GEvent()
         {
             _name = ToString();
         }
 
-        public Event(Action action)
+        public GEvent(Action<T1, T2> action)
         {
             _name = action.Method.Name;
             _action = action;
         }
 
-        public Event(string name)
+        public GEvent(string name)
         {
             _name = name;
         }
 
-        public Event(string name, params Action[] actions)
+        public GEvent(string name, params Action<T1, T2>[] actions)
         {
             _name = name;
             _action = null;
@@ -35,14 +35,15 @@ namespace GonDraz.Events
                     _action += action;
         }
 
-        public void Invoke(Action onComplete = null)
+        public void Invoke(T1 parameter1, T2 parameter2, Action onComplete = null)
         {
             if (_action == null) return;
 
-            foreach (var d in _action.GetInvocationList()) CallAction(d);
+            foreach (var d in _action.GetInvocationList()) CallAction(d, parameter1, parameter2);
 
             onComplete?.Invoke();
-        } // ReSharper disable Unity.PerformanceAnalysis
+        }
+
         private void CallAction(Delegate action, params object[] parameters)
         {
             if (action == null) return;
@@ -58,17 +59,21 @@ namespace GonDraz.Events
             }
         }
 
-        private static bool CheckForDuplicates(Event e, Action newAction)
+        private static bool CheckForDuplicates(GEvent<T1, T2> e, Action<T1, T2> newAction)
         {
-            if (e._action == null || newAction == null) return false;
-            if (!e._action.GetInvocationList().Contains(newAction)) return false;
-            Debug.LogError(
-                $"Event <color=yellow>[{e._name}]</color> : has been infected : <color=red>[{newAction.Method.Name}]</color>"
-            );
-            return true;
+            if (e._action != null && newAction != null)
+                if (e._action.GetInvocationList().Contains(newAction))
+                {
+                    Debug.LogError(
+                        $"Event <color=yellow>[{e._name}]</color> : has been infected : [{newAction.Method.Name}]"
+                    );
+                    return true;
+                }
+
+            return false;
         }
 
-        public static Event operator +(Event e, Action newAction)
+        public static GEvent<T1, T2> operator +(GEvent<T1, T2> e, Action<T1, T2> newAction)
         {
             if (CheckForDuplicates(e, newAction)) return e;
 
@@ -76,15 +81,15 @@ namespace GonDraz.Events
             return e;
         }
 
-        public static Event operator -(Event e, Action action)
+        public static GEvent<T1, T2> operator -(GEvent<T1, T2> e, Action<T1, T2> action)
         {
             e._action -= action;
             return e;
         }
 
-        public static implicit operator Event(Action action)
+        public static implicit operator GEvent<T1, T2>(Action<T1, T2> action)
         {
-            return new Event(action);
+            return new GEvent<T1, T2>(action);
         }
     }
 }

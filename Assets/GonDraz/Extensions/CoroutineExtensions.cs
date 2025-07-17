@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
+using GonDraz.Events;
 using UnityEngine;
-using Event = GonDraz.Events.Event;
 
 namespace GonDraz.Extensions
 {
@@ -91,7 +91,7 @@ namespace GonDraz.Extensions
         ///     Runs an action after a delay in seconds (using coroutine).
         ///     (Thực thi một hành động sau một khoảng delay bằng coroutine)
         /// </summary>
-        public static IEnumerator InvokeAfter(float delay, Event action)
+        public static IEnumerator InvokeAfter(float delay, GEvent action)
         {
             yield return new WaitForSeconds(delay);
             action?.Invoke();
@@ -101,7 +101,7 @@ namespace GonDraz.Extensions
         ///     Runs an action every interval seconds, for a number of times (using coroutine).
         ///     (Thực thi một hành động lặp lại nhiều lần với khoảng thời gian giữa các lần)
         /// </summary>
-        public static IEnumerator InvokeRepeating(float interval, int repeatCount, Event action)
+        public static IEnumerator InvokeRepeating(float interval, int repeatCount, GEvent action)
         {
             for (var i = 0; i < repeatCount; i++)
             {
@@ -114,7 +114,7 @@ namespace GonDraz.Extensions
         ///     Waits until a predicate is true, then runs an action.
         ///     (Chờ đến khi điều kiện đúng rồi thực thi một hành động)
         /// </summary>
-        public static IEnumerator WaitUntilThen(Event action, Func<bool> predicate)
+        public static IEnumerator WaitUntilThen(GEvent action, Func<bool> predicate)
         {
             yield return new WaitUntil(predicate);
             action?.Invoke();
@@ -124,7 +124,7 @@ namespace GonDraz.Extensions
         ///     Waits while a predicate is true, then runs an action.
         ///     (Chờ đến khi điều kiện sai rồi thực thi một hành động)
         /// </summary>
-        public static IEnumerator WaitWhileThen(Event action, Func<bool> predicate)
+        public static IEnumerator WaitWhileThen(GEvent action, Func<bool> predicate)
         {
             yield return new WaitWhile(predicate);
             action?.Invoke();

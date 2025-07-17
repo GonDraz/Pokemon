@@ -1,8 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
+using GonDraz.Events;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Event = GonDraz.Events.Event;
 
 namespace Player
 {
@@ -42,7 +42,7 @@ namespace Player
                     Host.animator.SetBool(IsMoving, true);
 
                     if (IsWalkable(target))
-                        MoveTo(target, new Event(CheckForEncounters)).Forget();
+                        MoveTo(target, new GEvent(CheckForEncounters)).Forget();
                     else
                         Host.animator.SetBool(IsMoving, false);
                 }
@@ -103,7 +103,7 @@ namespace Player
                 return Physics2D.OverlapBox(target, Vector2.one * 0.95f, 0f, Host.grassLayerMask);
             }
 
-            private async UniTaskVoid MoveTo(Vector3 target, Event callback = null)
+            private async UniTaskVoid MoveTo(Vector3 target, GEvent callback = null)
             {
                 Host._isMoving = true;
                 var speed = MoveSpeed();

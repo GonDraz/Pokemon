@@ -4,29 +4,29 @@ using UnityEngine;
 
 namespace GonDraz.Events
 {
-    public sealed class Event<T> : IEvent
+    public sealed class GEvent<T>
     {
         private readonly string _name;
 
         private Action<T> _action;
 
-        public Event()
+        public GEvent()
         {
             _name = ToString();
         }
 
-        public Event(Action<T> action)
+        public GEvent(Action<T> action)
         {
             _name = action.Method.Name;
             _action = action;
         }
 
-        public Event(string name)
+        public GEvent(string name)
         {
             _name = name;
         }
 
-        public Event(string name, params Action<T>[] actions)
+        public GEvent(string name, params Action<T>[] actions)
         {
             _name = name;
             _action = null;
@@ -59,7 +59,7 @@ namespace GonDraz.Events
             }
         }
 
-        private static bool CheckForDuplicates(Event<T> e, Action<T> newAction)
+        private static bool CheckForDuplicates(GEvent<T> e, Action<T> newAction)
         {
             if (e._action == null || newAction == null) return false;
             if (!e._action.GetInvocationList().Contains(newAction)) return false;
@@ -69,7 +69,7 @@ namespace GonDraz.Events
             return true;
         }
 
-        public static Event<T> operator +(Event<T> e, Action<T> newAction)
+        public static GEvent<T> operator +(GEvent<T> e, Action<T> newAction)
         {
             if (CheckForDuplicates(e, newAction)) return e;
 
@@ -77,15 +77,15 @@ namespace GonDraz.Events
             return e;
         }
 
-        public static Event<T> operator -(Event<T> e, Action<T> action)
+        public static GEvent<T> operator -(GEvent<T> e, Action<T> action)
         {
             e._action -= action;
             return e;
         }
 
-        public static implicit operator Event<T>(Action<T> action)
+        public static implicit operator GEvent<T>(Action<T> action)
         {
-            return new Event<T>(action);
+            return new GEvent<T>(action);
         }
     }
 }

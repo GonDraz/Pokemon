@@ -4,8 +4,8 @@ namespace GonDraz.Managers
 {
     public partial class EventManager
     {
-        public static Event ApplicationLoadFinished = new("ApplicationLoadFinished");
-        public static Event<bool> ApplicationPause = new("ApplicationPause");
-        public static Event GamePause = new("GamePause");
+        public static GEvent ApplicationLoadFinished = new("ApplicationLoadFinished");
+        public static GEvent<bool> ApplicationPause = new("ApplicationPause");
+        public static GEvent GamePause = new("GamePause");
     }
 }

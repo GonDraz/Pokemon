@@ -4,29 +4,29 @@ using UnityEngine;
 
 namespace GonDraz.Events
 {
-    public sealed class Event<T1, T2, T3> : IEvent
+    public sealed class GEvent<T1, T2, T3, T4>
     {
         private readonly string _name;
 
-        private Action<T1, T2, T3> _action;
+        private Action<T1, T2, T3, T4> _action;
 
-        public Event()
+        public GEvent()
         {
             _name = ToString();
         }
 
-        public Event(Action<T1, T2, T3> action)
+        public GEvent(Action<T1, T2, T3, T4> action)
         {
             _name = action.Method.Name;
             _action = action;
         }
 
-        public Event(string name)
+        public GEvent(string name)
         {
             _name = name;
         }
 
-        public Event(string name, params Action<T1, T2, T3>[] actions)
+        public GEvent(string name, params Action<T1, T2, T3, T4>[] actions)
         {
             _name = name;
             _action = null;
@@ -35,11 +35,12 @@ namespace GonDraz.Events
                     _action += action;
         }
 
-        public void Invoke(T1 parameter1, T2 parameter2, T3 parameter3, Action onComplete = null)
+        public void Invoke(T1 parameter1, T2 parameter2, T3 parameter3, T4 parameter4, Action onComplete = null)
         {
             if (_action == null) return;
 
-            foreach (var d in _action.GetInvocationList()) CallAction(d, parameter1, parameter2, parameter3);
+            foreach (var d in _action.GetInvocationList())
+                CallAction(d, parameter1, parameter2, parameter3, parameter4);
 
             onComplete?.Invoke();
         }
@@ -59,7 +60,7 @@ namespace GonDraz.Events
             }
         }
 
-        private static bool CheckForDuplicates(Event<T1, T2, T3> e, Action<T1, T2, T3> newAction)
+        private static bool CheckForDuplicates(GEvent<T1, T2, T3, T4> e, Action<T1, T2, T3, T4> newAction)
         {
             if (e._action != null && newAction != null)
                 if (e._action.GetInvocationList().Contains(newAction))
@@ -73,7 +74,7 @@ namespace GonDraz.Events
             return false;
         }
 
-        public static Event<T1, T2, T3> operator +(Event<T1, T2, T3> e, Action<T1, T2, T3> newAction)
+        public static GEvent<T1, T2, T3, T4> operator +(GEvent<T1, T2, T3, T4> e, Action<T1, T2, T3, T4> newAction)
         {
             if (CheckForDuplicates(e, newAction)) return e;
 
@@ -81,15 +82,15 @@ namespace GonDraz.Events
             return e;
         }
 
-        public static Event<T1, T2, T3> operator -(Event<T1, T2, T3> e, Action<T1, T2, T3> action)
+        public static GEvent<T1, T2, T3, T4> operator -(GEvent<T1, T2, T3, T4> e, Action<T1, T2, T3, T4> action)
         {
             e._action -= action;
             return e;
         }
 
-        public static implicit operator Event<T1, T2, T3>(Action<T1, T2, T3> action)
+        public static implicit operator GEvent<T1, T2, T3, T4>(Action<T1, T2, T3, T4> action)
         {
-            return new Event<T1, T2, T3>(action);
+            return new GEvent<T1, T2, T3, T4>(action);
         }
     }
 }
