@@ -91,5 +91,12 @@ namespace GonDraz.Events
         {
             return new GEvent<T1, T2>(action);
         }
+        
+        public static implicit operator Action<T1,T2>(GEvent<T1,T2> e)
+        {
+            Action<T1,T2> action = null;
+            if (e._action != null) action += e._action;
+            return action;
+        }
     }
 }
