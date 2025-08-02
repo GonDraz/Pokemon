@@ -10,30 +10,29 @@ namespace GonDraz
         protected virtual void OnEnable()
         {
             if (!SubscribeUsingOnEnable() || _isSubscribe) return;
-            _isSubscribe = true;
             Subscribe();
         }
 
         protected virtual void OnDisable()
         {
             if (!UnsubscribeUsingOnDisable() || !_isSubscribe) return;
-            _isSubscribe = false;
             Unsubscribe();
         }
 
         protected virtual void OnDestroy()
         {
-            _isSubscribe = false;
             Unsubscribe();
         }
 
         public virtual void Subscribe()
         {
+            if (_isSubscribe) return;
             _isSubscribe = true;
         }
 
         public virtual void Unsubscribe()
         {
+            if (!_isSubscribe) return;
             _isSubscribe = false;
         }
 
@@ -49,23 +48,19 @@ namespace GonDraz
 
         protected virtual void SubscribesChild()
         {
-            var childArray = GetComponentsInChildren<Base>();
-
-            foreach (var child in childArray) child.Subscribe();
+            SubscribesChild<Base>();
         }
 
         protected virtual void SubscribesChild<T>() where T : Base
         {
-            var childArray = GetComponentsInChildren<Base>();
+            var childArray = GetComponentsInChildren<T>();
 
             foreach (var child in childArray) child.Subscribe();
         }
 
         protected virtual void UnsubscribeChild()
         {
-            var childArray = GetComponentsInChildren<Base>();
-
-            foreach (var child in childArray) child.Unsubscribe();
+            UnsubscribeChild<Base>();
         }
 
         protected virtual void UnsubscribeChild<T>() where T : Base

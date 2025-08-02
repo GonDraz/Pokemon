@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -20,14 +21,14 @@ namespace GonDraz.Scene
             return sceneField.SceneName;
         }
 
-        public void LoadSceneAsync()
+        public async UniTask LoadSceneAsync()
         {
-            SceneLoaderService.LoadSceneAsync(SceneName);
+            await SceneLoaderService.LoadSceneAsync(SceneName);
         }
 
-        public void UnloadSceneAsync()
+        public async UniTask UnloadSceneAsync()
         {
-            SceneLoaderService.UnloadSceneAsync(SceneName);
+            await SceneLoaderService.UnloadSceneAsync(SceneName);
         }
     }
 

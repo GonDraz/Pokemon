@@ -50,28 +50,29 @@ namespace GonDraz.StateMachine
             }
         }
 
-        protected virtual void Awake()
+        private void Awake()
         {
-            if (GetCurrentState() == null) ChangeState(InitialState(), false);
+            GetCurrentState();
         }
 
         private void Update()
         {
-            _currentState.OnUpdate();
+            GetCurrentState().OnUpdate();
         }
 
         private void FixedUpdate()
         {
-            _currentState.OnFixedUpdate();
+            GetCurrentState().OnFixedUpdate();
         }
 
         private void LateUpdate()
         {
-            _currentState.OnLateUpdate();
+            GetCurrentState().OnLateUpdate();
         }
 
         protected TState GetCurrentState()
         {
+            if (_currentState == null) ChangeState(InitialState(), false);
             return _currentState;
         }
 
@@ -153,22 +154,22 @@ namespace GonDraz.StateMachine
 
         protected bool CanBack()
         {
-            if (_currentState.PreviousState == null) return false;
+            if (GetCurrentState().PreviousState == null) return false;
 
-            return _currentState.PreviousState.GetType().FullName != _currentState.GetType().FullName;
+            return GetCurrentState().PreviousState.GetType().FullName != GetCurrentState().GetType().FullName;
         }
 
         protected void BackToPreviousState()
         {
             if (!CanBack()) return;
 
-            _currentState.OnExit();
+            GetCurrentState().OnExit();
 
             // Debug.Log("Back state from <color=red>" + CurrentState.GetType().Name + "</color> to <color=green>" +
             //           CurrentState.PreviousState.GetType().Name + "</color>");
 
-            _currentState = _currentState.PreviousState;
-            _currentState.OnEnter();
+            _currentState = GetCurrentState().PreviousState;
+            GetCurrentState().OnEnter();
         }
 
         public void RegisterEvent<TS>(EventState eventState, Action action) where TS : TState

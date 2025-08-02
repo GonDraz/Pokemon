@@ -54,7 +54,8 @@ namespace GonDraz.Events
             catch (Exception e)
             {
                 Debug.LogError(
-                    $"<color=yellow>Event[{_name}]</color> : error : [{action.Method.Name}] => {e}"
+                    $"Event <color=yellow>[{_name}]</color> : has been infected : <color=red>[{action.Method.Name}]</color>\n" +
+                    $"Exception: {e.Message}\nStackTrace: {e.StackTrace}"
                 );
             }
         }
@@ -75,6 +76,8 @@ namespace GonDraz.Events
 
         public static GEvent<T1, T2, T3> operator +(GEvent<T1, T2, T3> e, Action<T1, T2, T3> newAction)
         {
+            e ??= new GEvent<T1, T2, T3>();
+
             if (CheckForDuplicates(e, newAction)) return e;
 
             e._action += newAction;
@@ -83,6 +86,8 @@ namespace GonDraz.Events
 
         public static GEvent<T1, T2, T3> operator -(GEvent<T1, T2, T3> e, Action<T1, T2, T3> action)
         {
+            e ??= new GEvent<T1, T2, T3>();
+
             e._action -= action;
             return e;
         }
@@ -94,6 +99,8 @@ namespace GonDraz.Events
 
         public static implicit operator Action<T1, T2, T3>(GEvent<T1, T2, T3> e)
         {
+            e ??= new GEvent<T1, T2, T3>();
+
             Action<T1, T2, T3> action = null;
             if (e._action != null) action = e._action;
             return action;

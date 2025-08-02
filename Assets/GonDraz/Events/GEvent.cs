@@ -42,7 +42,9 @@ namespace GonDraz.Events
             foreach (var d in _action.GetInvocationList()) CallAction(d);
 
             onComplete?.Invoke();
-        } // ReSharper disable Unity.PerformanceAnalysis
+        }
+
+        // ReSharper disable Unity.PerformanceAnalysis
         private void CallAction(Delegate action, params object[] parameters)
         {
             if (action == null) return;
@@ -53,7 +55,8 @@ namespace GonDraz.Events
             catch (Exception e)
             {
                 Debug.LogError(
-                    $"<color=yellow>Event[{_name}]</color> : error : [{action.Method.Name}] => {e}"
+                    $"Event <color=yellow>[{_name}]</color> : has been infected : <color=red>[{action.Method.Name}]</color>\n" +
+                    $"Exception: {e.Message}\nStackTrace: {e.StackTrace}"
                 );
             }
         }
@@ -70,6 +73,7 @@ namespace GonDraz.Events
 
         public static GEvent operator +(GEvent e, Action newAction)
         {
+            e ??= new GEvent();
             if (CheckForDuplicates(e, newAction)) return e;
 
             e._action += newAction;
@@ -78,6 +82,7 @@ namespace GonDraz.Events
 
         public static GEvent operator -(GEvent e, Action action)
         {
+            e ??= new GEvent();
             e._action -= action;
             return e;
         }
@@ -89,6 +94,7 @@ namespace GonDraz.Events
 
         public static implicit operator Action(GEvent e)
         {
+            e ??= new GEvent();
             Action action = null;
             if (e._action != null) action += e._action;
             return action;

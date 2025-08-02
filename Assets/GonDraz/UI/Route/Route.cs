@@ -3,7 +3,7 @@ using EventManager = GonDraz.Managers.EventManager;
 
 namespace GonDraz.UI.Route
 {
-    public class Route : MonoBehaviour
+    public class Route : Base
     {
         private bool _onPress;
 

@@ -6,7 +6,7 @@ namespace GonDraz.StateMachine
     {
         public static TMachine Instance { get; private set; }
 
-        protected override void Awake()
+        protected void Awake()
         {
             if (Instance)
             {
@@ -16,7 +16,6 @@ namespace GonDraz.StateMachine
 
             Instance = this as TMachine;
             DontDestroyOnLoad(this);
-            base.Awake();
         }
 
         protected override void OnDestroy()

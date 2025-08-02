@@ -1,11 +1,16 @@
-using System;
+using GonDraz.Events;
 
 namespace GonDraz.StateMachine
 {
     public class BaseState<TMachine, TState> : IState
     {
-        public TMachine Host;
+        public GEvent Enter;
+        public GEvent Exit;
+        public GEvent FixedUpdate;
+        protected TMachine Host;
+        public GEvent LateUpdate;
         public TState PreviousState;
+        public GEvent Update;
 
         public virtual void OnEnter()
         {
@@ -31,12 +36,6 @@ namespace GonDraz.StateMachine
         {
             Exit?.Invoke();
         }
-
-        public event Action Enter;
-        public event Action Exit;
-        public event Action FixedUpdate;
-        public event Action LateUpdate;
-        public event Action Update;
 
         public virtual void OnPause()
         {

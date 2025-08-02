@@ -56,16 +56,20 @@ namespace Map
                 var requiredScenes = new List<Type> { GetType() };
                 requiredScenes.AddRange(ScenesToLoad());
 
-                foreach (var mapScene in Host.MapConfig.GetMapScenes())
+                foreach (var mapScene in from mapScene in Host.MapConfig.GetMapScenes()
+                         let shouldBeLoaded = requiredScenes.Any(s => s.Name == mapScene.SceneName)
+                         where !shouldBeLoaded
+                         select mapScene)
                 {
-                    var shouldBeLoaded = requiredScenes.Any(s => s.Name == mapScene.SceneName);
-                    if (!shouldBeLoaded) mapScene.UnloadSceneAsync();
+                    _ = mapScene.UnloadSceneAsync();
                 }
 
-                foreach (var mapScene in Host.MapConfig.GetMapScenes())
+                foreach (var mapScene in from mapScene in Host.MapConfig.GetMapScenes()
+                         let shouldBeLoaded = requiredScenes.Any(s => s.Name == mapScene.SceneName)
+                         where shouldBeLoaded
+                         select mapScene)
                 {
-                    var shouldBeLoaded = requiredScenes.Any(s => s.Name == mapScene.SceneName);
-                    if (shouldBeLoaded) mapScene.LoadSceneAsync();
+                    _ = mapScene.LoadSceneAsync();
                 }
             }
 

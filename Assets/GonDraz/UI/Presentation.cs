@@ -34,6 +34,11 @@ namespace GonDraz.UI
             return true;
         }
 
+        protected override bool UnsubscribeUsingOnDisable()
+        {
+            return true;
+        }
+        
         public virtual void Show()
         {
             Active();
