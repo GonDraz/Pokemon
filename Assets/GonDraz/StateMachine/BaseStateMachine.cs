@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GonDraz.Events;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -129,7 +130,8 @@ namespace GonDraz.StateMachine
                 {
                     _currentState = state;
                     if (enableDebugLog)
-                        Debug.Log($"Change state to <color=red>{_currentState.GetType().Name}</color>");
+                        Debug.Log(
+                            $"<color=blue>{name}</color> - Change state to <color=red>{_currentState.GetName()}</color>");
                     _currentState.OnEnter();
                     return;
                 }
@@ -139,7 +141,7 @@ namespace GonDraz.StateMachine
 
                 if (enableDebugLog)
                     Debug.Log(
-                        $"Change state from <color=red>{_currentState.GetType().Name}</color> to <color=green>{state.GetType().Name}</color>");
+                        $"<color=blue>{name}</color> - Change state from <color=red>{_currentState.GetName()}</color> to <color=green>{state.GetType().Name}</color>");
 
                 _currentState.OnExit();
                 var previousState = _currentState;
@@ -156,7 +158,7 @@ namespace GonDraz.StateMachine
         {
             if (GetCurrentState().PreviousState == null) return false;
 
-            return GetCurrentState().PreviousState.GetType().FullName != GetCurrentState().GetType().FullName;
+            return GetCurrentState().PreviousState.GetName() != GetCurrentState().GetName();
         }
 
         protected void BackToPreviousState()
@@ -172,7 +174,13 @@ namespace GonDraz.StateMachine
             GetCurrentState().OnEnter();
         }
 
+
         public void RegisterEvent<TS>(EventState eventState, Action action) where TS : TState
+        {
+            RegisterEvent<TS>(eventState, new GEvent(action));
+        }
+
+        public void RegisterEvent<TS>(EventState eventState, GEvent action) where TS : TState
         {
             lock (_lock)
             {
@@ -194,6 +202,9 @@ namespace GonDraz.StateMachine
                         case EventState.Update:
                             state.Update += action;
                             break;
+                        default:
+                            Debug.LogError($"Error RegisterEvent: {eventState} is not a valid EventState");
+                            break;
                     }
                 else
                     Debug.LogError($"Error RegisterEvent: {eventState} Can't register Action: {action}");
@@ -201,6 +212,11 @@ namespace GonDraz.StateMachine
         }
 
         public void UnregisterEvent<TS>(EventState eventState, Action action) where TS : TState
+        {
+            UnregisterEvent<TS>(eventState, new GEvent(action));
+        }
+
+        public void UnregisterEvent<TS>(EventState eventState, GEvent action) where TS : TState
         {
             lock (_lock)
             {
@@ -221,6 +237,9 @@ namespace GonDraz.StateMachine
                             break;
                         case EventState.Update:
                             state.Update -= action;
+                            break;
+                        default:
+                            Debug.LogError($"Error UnregisterEvent: {eventState} is not a valid EventState");
                             break;
                     }
                 else
