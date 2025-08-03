@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
+using GonDraz.Events;
+using GonDraz.Interfaces;
 using GonDraz.StateMachine;
 using UnityEngine;
 using EventManager = GonDraz.Managers.EventManager;
 
 namespace Map
 {
-    public partial class MapControl : BaseStateMachine<MapControl, MapControl.MapState>
+    public partial class MapControl : BaseStateMachine<MapControl, MapControl.MapState>, IAsyncInitProgress
     {
         private MapConfig mapConfig;
 
@@ -45,6 +48,11 @@ namespace Map
         private void OnMapTriggerEnter(string screen)
         {
             ChangeState(screen);
+        }
+
+        public async UniTask InitAsync()
+        {
+
         }
 
         public abstract class MapState : BaseState<MapControl, MapState>
